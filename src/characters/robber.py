@@ -1,7 +1,4 @@
 # Персонаж-шкідник, краде мовчки.
-class Robber(Human):
-    def introduce(self):
-        pass
-
-    def sabotage(self):
+class Robber(Silent):
+    def do_action(self):
         pass
