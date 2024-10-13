@@ -1,4 +1,4 @@
-class Woman(Human):
+class Nurse(Human):
     def introduce(self):
         pass
 
