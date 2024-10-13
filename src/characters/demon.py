@@ -1,6 +1,6 @@
 class Demon(Spirit):
-  def introduce(self):
-    pass 
-     
-  def give_riddle(self):
-    pass 
+    def introduce(self):
+        pass
+
+    def give_riddle(self):
+        pass
