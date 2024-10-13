@@ -1,5 +1,5 @@
 # Забирає 1 життя.
-class Witch(Spirit):
+class Witch(Silent):
     def introduce(self):
         pass
 
