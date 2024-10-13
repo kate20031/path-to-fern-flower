@@ -1,3 +1,4 @@
+# Дає шанс відкупитись, інакше - :(
 class Bandit(Human):
     def introduce(self):
         pass
