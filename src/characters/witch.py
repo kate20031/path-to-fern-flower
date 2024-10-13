@@ -1,7 +1,4 @@
 # Забирає 1 життя.
 class Witch(Silent):
-    def introduce(self):
+    def do_action(self):
         pass
-
-    def give_riddle(self):
-        pass 
