@@ -1,7 +1,4 @@
 # Додає + 1 життя.
-class Nurse(Human):
-    def introduce(self):
+class Nurse(Silent):
+    def do_action(self):
         pass
-
-    def sabotage(self):
-        pass 
