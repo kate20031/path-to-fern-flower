@@ -1,3 +1,4 @@
+# Забирає 1 життя.
 class Witch(Spirit):
     def introduce(self):
         pass
