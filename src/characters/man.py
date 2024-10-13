@@ -1,3 +1,4 @@
+# Просто ставить питання.
 class Man(Human):
     def introduce(self):
         pass
