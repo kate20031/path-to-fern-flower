@@ -40,7 +40,7 @@ class Game:
         global met_people, met_spirits, met_silent
 
         for character in self.characters:
-
+            character.do_action()
             # Update the met counters
             if isinstance(character, tuple(self.people_classes)):
                 met_people += 1

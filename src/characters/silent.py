@@ -58,7 +58,7 @@ class Robber(Silent):
 class Traveler(Silent):
     def __init__(self, player: Player):
         super().__init__(player)
-        self.speech = self.load_speech('assets/texts/traveller_speech.txt')
+        self.speech = self.load_speech('../../assets/texts/traveller_speech.txt')
 
     def do_action(self):
         self.give_hint()
@@ -90,7 +90,7 @@ class Undead(Silent):
     def __init__(self, player: Player):
         super().__init__(player)
         self.name = "Undead"
-        self.speech = self.load_speech('assets/texts/undead_speech.txt')
+        self.speech = self.load_speech('../../assets/texts/undead_speech.txt')
 
     @staticmethod
     def ask_question():
