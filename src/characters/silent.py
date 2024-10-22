@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import random
-from ..game.player import Player  # Імпорт класу Player
+from src.game.player import Player  # Імпорт класу Player
 
 class Silent(ABC):
     @abstractmethod
@@ -77,7 +77,8 @@ class Witch(Silent):
         else:
             print("Game over")
 
-# Питає, чи хочеш дізн. про іст. смерті, якщо ні - кікаєш персонажа,
+# Питає, чи хочеш дізн. про іст. смерті,
+# якщо ні - забирає життя / предмет персонажа (дає вибір),
 # так - розповідь і пропуск ходу.
 class Undead(Silent):
     def __init__(self, player: Player):
@@ -105,7 +106,12 @@ class Undead(Silent):
         if answer:
             self.tell_story()
         else:
-            self.rem_life()
+            choice = input("Lose a life or an item? (life/item): ").strip().lower()
+            if choice == 'life':
+                self.rem_life()
+            else:
+                self.player.del_item(random.randint(0, len(self.player.items) - 1))
+                print("You lost an item instead of a life.")
     
     def rem_life(self):
         if self.player.lives >= 1:
