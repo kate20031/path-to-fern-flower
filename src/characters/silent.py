@@ -2,10 +2,21 @@ from abc import ABC, abstractmethod
 import random
 from src.game.player import Player  # Імпорт класу Player
 
+
+
+
 class Silent(ABC):
     @abstractmethod
     def do_action(self):
         pass
+
+    def load_speech(self, file_path):
+        try:
+            with open(file_path, 'r') as file:
+                return file.read().strip()
+        except FileNotFoundError:
+            print(f"Error: The file {file_path} was not found.")
+            return ""
 
 # Додає + 1 життя.
 class Nurse(Silent):
@@ -50,14 +61,6 @@ class Traveler(Silent):
         self.give_hint()
         pass
 
-    def load_speech(self, file_path):
-        try:
-            with open(file_path, 'r') as file:
-                return file.read().strip()
-        except FileNotFoundError:
-            print(f"Error: The file {file_path} was not found.")
-            return ""
-
     def give_hint(self):
         print(self.speech)
 
@@ -94,20 +97,12 @@ class Undead(Silent):
     def tell_story(self):
         print(self.speech)
 
-    def load_speech(self, file_path):
-        try:
-            with open(file_path, 'r') as file:
-                return file.read().strip()
-        except FileNotFoundError:
-            print(f"Error: The file {file_path} was not found.")
-            return ""
-
     def process_answer(self, answer):
         if answer:
             self.tell_story()
         else:
             choice = input("Lose a life or an item? (life/item): ").strip().lower()
-            if choice == 'life':
+            if choice == 'life' :
                 self.rem_life()
             else:
                 self.player.del_item(random.randint(0, len(self.player.items) - 1))
