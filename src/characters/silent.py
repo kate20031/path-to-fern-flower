@@ -10,6 +10,9 @@ class Silent(ABC):
     def do_action(self):
         pass
 
+    def __init__(self, player: Player):
+        self.player = player  # Зберігаємо екземпляр Player
+
     def load_speech(self, file_path):
         try:
             with open(file_path, 'r') as file:
@@ -21,7 +24,7 @@ class Silent(ABC):
 # Додає + 1 життя.
 class Nurse(Silent):
     def __init__(self, player: Player):
-        self.player = player  # Зберігаємо екземпляр Player
+        super().__init__(player)
 
     def do_action(self):
         self.add_life()
@@ -36,7 +39,7 @@ class Nurse(Silent):
 # Персонаж-шкідник, краде мовчки.
 class Robber(Silent):
     def __init__(self, player: Player):
-        self.player = player  # Зберігаємо екземпляр Player
+        super().__init__(player)
 
     def do_action(self):
         self.steal_item()
@@ -54,7 +57,7 @@ class Robber(Silent):
 # Дає підказку про майбутніх персонажів (можна зробити лічильник на духів і людей).
 class Traveler(Silent):
     def __init__(self, player: Player):
-        self.player = player  # Зберігаємо екземпляр Player
+        super().__init__(player)
         self.speech = self.load_speech('assets/texts/traveller_speech.txt')
 
     def do_action(self):
@@ -67,7 +70,7 @@ class Traveler(Silent):
 # Забирає 1 життя.
 class Witch(Silent):
     def __init__(self, player: Player):
-        self.player = player  # Зберігаємо екземпляр Player
+        super().__init__(player)
 
     def do_action(self):
         self.rem_life()
@@ -85,7 +88,7 @@ class Witch(Silent):
 # так - розповідь і пропуск ходу.
 class Undead(Silent):
     def __init__(self, player: Player):
-        self.player = player  # Зберігаємо екземпляр Player
+        super().__init__(player)
         self.name = "Undead"
         self.speech = self.load_speech('assets/texts/undead_speech.txt')
 

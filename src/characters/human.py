@@ -8,6 +8,9 @@ class Human(Character):
 
 # Просто ставить питання.
 class Man(Human):
+    def __init__(self, player):
+        super().__init__(player)
+
     def introduce(self):
         pass
 
@@ -16,6 +19,9 @@ class Man(Human):
 
 # Дає підказку за товар, інакше - бреше.
 class Peasant(Human):
+    def __init__(self, player):
+        super().__init__(player)
+
     def introduce(self):
         pass
 
@@ -24,6 +30,9 @@ class Peasant(Human):
 
 # Продає товар молоко, від духів, від бандита який потім можна виміняти.
 class Merchant(Human):
+    def __init__(self, player):
+        super().__init__(player)
+
     def introduce(self):
         pass
 
@@ -32,6 +41,9 @@ class Merchant(Human):
 
 # Дає шанс відкупитись, інакше - :(
 class Bandit(Human):
+    def __init__(self, player):
+        super().__init__(player)
+
     def introduce(self):
         pass
 
