@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import random
 from src.game.player import Player  # Імпорт класу Player
-
+from constants import TRAVELER_SPEECH_PATH, UNDEAD_SPEECH_PATH
 
 
 
@@ -58,7 +58,7 @@ class Robber(Silent):
 class Traveler(Silent):
     def __init__(self, player: Player):
         super().__init__(player)
-        self.speech = self.load_speech('../../assets/texts/traveller_speech.txt')
+        self.speech = self.load_speech(TRAVELER_SPEECH_PATH)
 
     def do_action(self):
         self.give_hint()
@@ -90,7 +90,7 @@ class Undead(Silent):
     def __init__(self, player: Player):
         super().__init__(player)
         self.name = "Undead"
-        self.speech = self.load_speech('../../assets/texts/undead_speech.txt')
+        self.speech = self.load_speech(UNDEAD_SPEECH_PATH)
 
     @staticmethod
     def ask_question():
