@@ -104,12 +104,15 @@ class Undead(Silent):
         if answer:
             self.tell_story()
         else:
-            choice = input("Lose a life or an item? (life/item): ").strip().lower()
-            if choice == 'life' :
-                self.rem_life()
+            if self.player.items: 
+                choice = input("Lose a life or an item? (life/item): ").strip().lower()
+                if choice == 'life' :
+                    self.rem_life()
+                else:
+                    self.player.del_item(random.randint(0, len(self.player.items) - 1))
+                    print("You lost an item instead of a life.")
             else:
-                self.player.del_item(random.randint(0, len(self.player.items) - 1))
-                print("You lost an item instead of a life.")
+                self.rem_life()
     
     def rem_life(self):
         if self.player.lives >= 1:
