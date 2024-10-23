@@ -3,8 +3,6 @@ import random
 from src.game.player import Player  # Імпорт класу Player
 from constants import TRAVELER_SPEECH_PATH, UNDEAD_SPEECH_PATH
 
-
-
 class Silent(ABC):
     @abstractmethod
     def do_action(self):
