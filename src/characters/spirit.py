@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from ..characters.character import Character
 from src.game.player import Player  # Імпорт класу Player
-from constants import MAVKA_RIDDLE_PATH, MAVKA_SPEECH_PATH
+from constants import *
 from utils import load_speech
 
 class Spirit(Character):
@@ -65,16 +65,35 @@ class ForestGuardian(Spirit):
     def do_action(self):
         print("I am ForestGuardian")
 
-# Дає гроші (спонсор)
+# Демон(чорт). Якщо вгадати загадку - дає багато грошей, якщо ні - забирає багато грошей
 class Demon(Spirit):
     def __init__(self, player: Player):
         super().__init__(player)
-
-    def guess_character(self):
-        pass
+        self.riddle =load_speech(self, DEMON_RIDDLE_PATH)
+        self.speech = load_speech(self, DEMON_SPEECH_PATH)
 
     def do_action(self):
-        print("I am Demon")
-
-
+        if self.guess_character() == 's': 
+            print(self.speech) 
+            print(self.riddle)  # Print the riddle if guessed correctly
+        else:
+            if self.player.coins:
+                if self.player.coins>=10: 
+                    stolen_coins = 10
+                    self.player.coins-= stolen_coins
+                else: 
+                    stolen_coins = stolen_coins
+                    self.player.coins = 0
+                print(DEMON_STEALS_COINS)
+                print(f"Demon has stolen {stolen_coins} coins!")
+            else:
+                print(DEMON_SEES_NO_COINS)
+                self.rem_life()
+    
+    def rem_life(self):
+        if self.player.lives >= 1:
+            self.player.lives -= 1  # Забирає життя, якщо їх кількість більше = 1
+            print("Demon has wounded you!")
+        else:
+            print("Game over")
 

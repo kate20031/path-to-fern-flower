@@ -6,4 +6,4 @@ REM
 set PYTHONPATH=%cd%
 
 REM
-python -m src.characters.human
+python -m src.game.game

@@ -1,19 +1,42 @@
 ASSETS_DIR = 'assets/'
 TEXTS_DIR = f'{ASSETS_DIR}texts/'
 
+# SILENT
+####################################################################################################
 #TRAVELER
 TRAVELER_SPEECH_PATH = f'{TEXTS_DIR}traveller_speech.txt'
 
-
 #UNDEAD
 UNDEAD_SPEECH_PATH = f'{TEXTS_DIR}undead_speech.txt'
+####################################################################################################
 
 
+# SPIRITS
+####################################################################################################
 #MAVKA
 MAVKA_SPEECH_PATH = f'{TEXTS_DIR}mavka_speech.txt'
 MAVKA_RIDDLE_PATH = f'{TEXTS_DIR}mavka_riddle.txt'
 
+#DEMON
+DEMON_SPEECH_PATH = f'{TEXTS_DIR}demon_speech.txt'
+DEMON_RIDDLE_PATH = f'{TEXTS_DIR}demon_riddle.txt'
+DEMON_STEALS_COINS= "Not wise enough, as now I see!\
+    \nThy coins now belong to me!\
+    \nGood luck next time you, foolish brat!\
+    \nFor thou hast lost, and that is that!"
+DEMON_GIVES_COINS = "Impressive, thou hast passed my test!\
+    \nThy wits have saved thee from the worst!\
+    \nKeep coins, yet thou heed my call,\
+    \nNext time it may not end so small!"
+DEMON_SEES_NO_COINS = "Alas, thou hast no coin to keep,\
+    \nAnd now thy fate is dark and steep.\
+    \nFor he who comes with naught to share,\
+    \nShall meet his end, lost to despair!" 
+####################################################################################################
 
+
+# HUMANS
+####################################################################################################
 #PEASENT
 # Constants for trade options
 TRADE_YES = 'yes'

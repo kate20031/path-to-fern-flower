@@ -171,7 +171,6 @@ class Merchant(Human):
             print(MERCHANT_TRADE_NOT_OCCURED)
 
 
-
 # Gives the player a chance to pay off, otherwise... :(
 class Bandit(Human):
     def __init__(self, player):
@@ -204,9 +203,3 @@ class Bandit(Human):
         self.player.is_alive = False
         print(BANDIT_KILL_MESSAGE)
 
-
-if __name__ == "__main__":
-    player = Player("a")
-    player.items[2] = "BARTKA"
-    merchant = Merchant(player)
-    merchant.do_action()
