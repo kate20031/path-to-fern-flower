@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import random
 from src.game.player import Player  # Імпорт класу Player
 from constants import TRAVELER_SPEECH_PATH, UNDEAD_SPEECH_PATH
-from utils import load_speech
+from utils import load_speech, rem_life
 
 class Silent(ABC):
     @abstractmethod
@@ -11,14 +11,6 @@ class Silent(ABC):
 
     def __init__(self, player: Player):
         self.player = player  # Зберігаємо екземпляр Player
-
-    # def load_speech(self, file_path):
-    #     try:
-    #         with open(file_path, 'r') as file:
-    #             return file.read().strip()
-    #     except FileNotFoundError:
-    #         print(f"Error: The file {file_path} was not found.")
-    #         return ""
 
 # Додає + 1 життя.
 class Nurse(Silent):
@@ -72,15 +64,8 @@ class Witch(Silent):
         super().__init__(player)
 
     def do_action(self):
-        self.rem_life()
+        rem_life(self)
         pass
-
-    def rem_life(self):
-        if self.player.lives >= 1:
-            self.player.lives -= 1  # Забирає життя, якщо їх кількість більше = 1
-            print("A witch has enchanted you!")
-        else:
-            print("Game over")
 
 # Питає, чи хочеш дізн. про іст. смерті,
 # якщо ні - забирає життя / предмет персонажа (дає вибір),
@@ -106,19 +91,12 @@ class Undead(Silent):
             if self.player.items: 
                 choice = input("Lose a life or an item? (life/item): ").strip().lower()
                 if choice == 'life' :
-                    self.rem_life()
+                    rem_life(self)
                 else:
                     self.player.del_item(random.randint(0, len(self.player.items) - 1))
                     print("You lost an item instead of a life.")
             else:
-                self.rem_life()
-    
-    def rem_life(self):
-        if self.player.lives >= 1:
-            self.player.lives -= 1  # Забирає життя, якщо більше = 
-            print("You have lost 1 life")
-        else:
-            print("Game over")
+                rem_life(self)
 
     def do_action(self):
         print("I am Undead")
