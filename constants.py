@@ -20,15 +20,24 @@ MAVKA_RIDDLE_PATH = f'{TEXTS_DIR}mavka_riddle.txt'
 #DEMON
 DEMON_SPEECH_PATH = f'{TEXTS_DIR}demon_speech.txt'
 DEMON_RIDDLE_PATH = f'{TEXTS_DIR}demon_riddle.txt'
-DEMON_STEALS_COINS= "Not wise enough, as now I see!\
+
+GIVE_TO_DEMON ='yes'
+NOT_GIVE_TO_DEMON ='no'
+
+DEMON_BRIBE = f"You have Varenucha in your inventory! Give it to the devil? ({GIVE_TO_DEMON}, {NOT_GIVE_TO_DEMON})"
+DEMON_STEALS_COINS= "\nNot wise enough, as now I see!\
     \nThy coins now belong to me!\
     \nGood luck next time you, foolish brat!\
     \nFor thou hast lost, and that is that!"
-DEMON_GIVES_COINS = "Impressive, thou hast passed my test!\
+DEMON_RETREATS = "\nImpressive, thou hast passed my test!\
     \nThy wits have saved thee from the worst!\
-    \nKeep coins, yet thou heed my call,\
+    \nEnjoy thy path, yet heed my call,\
     \nNext time it may not end so small!"
-DEMON_SEES_NO_COINS = "Alas, thou hast no coin to keep,\
+DEMON_GIVES_A_CHANCE = "\nThy life I seek, a tempting prize,\
+    \nYet mercy lingers in my eyes.\
+    \nIf thou bestow something of value,\
+    \nThat trinket may, if I wish, save thou."
+DEMON_KILLS = "\nAlas, thou nothing hast to keep,\
     \nAnd now thy fate is dark and steep.\
     \nFor he who comes with naught to share,\
     \nShall meet his end, lost to despair!" 

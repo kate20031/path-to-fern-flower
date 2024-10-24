@@ -87,13 +87,26 @@ class Demon(Spirit):
                 print(DEMON_STEALS_COINS)
                 print(f"Demon has stolen {stolen_coins} coins!")
             else:
-                print(DEMON_SEES_NO_COINS)
-                self.rem_life()
-    
+                if self.player.items[0]:
+                    print(DEMON_GIVES_A_CHANCE)
+                    answer = input(DEMON_BRIBE).strip().lower()
+                    if answer == GIVE_TO_DEMON:
+                        self.player.items[0] = None
+                        print(DEMON_RETREATS)
+                    else: 
+                        self.kill_player()
+                else:
+                    self.kill_player()
+
+    def kill_player(self):
+        print(DEMON_KILLS)
+        self.rem_life()
+        
     def rem_life(self):
         if self.player.lives >= 1:
             self.player.lives -= 1  # Забирає життя, якщо їх кількість більше = 1
             print("Demon has wounded you!")
         else:
             print("Game over")
+
 
