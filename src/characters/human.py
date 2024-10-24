@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from sqlalchemy.sql.functions import random
+#from sqlalchemy.sql.functions import random
+from src.game.player import Player  # Імпорт класу Player
 from ..characters.character import Character
 from constants import *
 
@@ -67,16 +68,109 @@ class Peasant(Human):
         else:
             print(PEASANT_NO_ITEMS_FOR_TRADE)
 
-# Sells items like milk from spirits or from a bandit, which can be traded later.
+# Sells items like wormwood from spirits or bartka (an axe) from a bandit, which can be traded later.
 class Merchant(Human):
     def __init__(self, player):
         super().__init__(player)
 
     def introduce(self):
-        pass
+        print(MERCHANT_INTRO)
 
     def do_action(self):
-        print(MERCHANT_ACTION)
+        self.introduce()
+        item_mapping = self.get_item_mapping()
+        
+        visit_shop = input(SHOP_CHOICE).strip().lower()
+        if visit_shop == VISIT_SHOP_YES:
+            while self.player.coins > 7:
+                action = input("\nWould you like to 'buy' or 'trade'? ").strip().lower()
+
+                if action not in ['buy', 'trade']:
+                    print("Invalid option. Please choose 'buy' or 'trade'.")
+                    continue
+                
+                if action == 'buy':
+                    self.handle_purchase(item_mapping)
+
+                elif action == 'trade':
+                    self.handle_trade(item_mapping)
+        else:
+            print(VISIT_SHOP_NO)
+
+    def get_item_mapping(self):
+        return {
+            BUY_VARENUCHA: ("VARENUCHA", VARENUCHA),
+            BUY_WORMWOOD: ("WORMWOOD", WORMWOOD),
+            BUY_BARTKA: ("BARTKA", BARTKA),
+        }
+
+    def handle_purchase(self, item_mapping):
+        print(DISPLAY)
+        answer_buy = input(GOODS).strip().lower()
+
+        if answer_buy in item_mapping:
+            item_name, item_cost = item_mapping[answer_buy]
+            index = int(answer_buy) - 1  # Use the input as the index directly
+
+            if self.player.items[index] is None:
+                if self.player.coins >= item_cost:
+                    self.player.items[index] = item_name
+                    self.player.coins -= item_cost
+                    print(MERCHANT_PURCHASE_THANKS)
+                else:
+                    print(MERCHANT_NOT_ENOUGH_COINS)
+                    self.handle_trade(item_mapping)
+            else:
+                print("You already have this item in your inventory!")
+        else:
+            print(MERCHANT_NO_PURCHASE)
+
+    def handle_trade(self, item_mapping):
+        print(MERCHANT_TRADE)
+        trade_ans = input(MERCHANT_TRADE_OPTION).strip().lower()
+
+        if trade_ans == MARCHANT_TRADE_YES:
+            print(TRADES)
+            print("Select an item from your inventory to trade:")
+            for idx, item in enumerate(self.player.items):
+                if item is None:
+                    print(f"Slot {idx + 1}: Empty")
+                else:
+                    print(f"Slot {idx + 1}: {item}")
+
+            trade_index = int(input("Enter the number of the item you want to trade: ")) - 1
+
+            if 0 <= trade_index < len(self.player.items) and self.player.items[trade_index] is not None:
+                traded_item = self.player.items[trade_index]
+                self.player.items[trade_index] = None  # Remove traded item
+
+                print("Select the new item you want to receive:")
+                for idx, (item_name, _) in enumerate(item_mapping.values()):
+                    print(f"{idx + 1}: {item_name}")
+
+                new_item_choice = int(input("Enter the number of the new item: ")) - 1
+
+                # Check if the new_item_choice is valid
+                if new_item_choice < 0 or new_item_choice >= len(item_mapping):
+                    print("Invalid item selection.")
+                    return
+
+                # Get the actual item name for the new choice
+                new_item_name = item_mapping[list(item_mapping.keys())[new_item_choice]][0]
+
+                # Check if the player already has the new item
+                if new_item_name in self.player.items:
+                    print(f"You already have {new_item_name} in your inventory!")
+                else:
+                    # Add new item to inventory
+                    self.player.items[new_item_choice] = new_item_name
+                    print(f"You traded {traded_item} for {new_item_name}!")
+            else:
+                print("Invalid trade option.")
+        else:
+            print(MERCHANT_TRADE_NOT_OCCURED)
+
+
 
 # Gives the player a chance to pay off, otherwise... :(
 class Bandit(Human):
@@ -109,3 +203,10 @@ class Bandit(Human):
     def kill_player(self):
         self.player.is_alive = False
         print(BANDIT_KILL_MESSAGE)
+
+
+if __name__ == "__main__":
+    player = Player("a")
+    player.items[2] = "BARTKA"
+    merchant = Merchant(player)
+    merchant.do_action()

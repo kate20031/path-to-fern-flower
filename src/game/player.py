@@ -2,9 +2,9 @@ class Player:
     def __init__(self, nickname):
         self._nickname = nickname
         self._score = 0
-        self._coins = 0
+        self._coins = 10 #початковий капітал
         self._lives = 3
-        self._items = [None, None, None] #trade_item, spirit_defense, human_defence
+        self._items = [None, None, None] #Varenucha, Wormwood, Bartka
         self.remaining_people = None
         self.remaining_spirits = None
         self.is_alive = True

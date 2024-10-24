@@ -37,7 +37,41 @@ MAN_ACTION = "I am Man"
 
 
 # MERCHANT
-MERCHANT_ACTION = "I am Merchant"
+VISIT_SHOP_YES = MARCHANT_TRADE_YES = 'yes'
+VISIT_SHOP_NO = MARCHANT_TRADE_NO = 'no'
+# Number of coins for each item
+VARENUCHA = 8
+BARTKA = 10
+WORMWOOD = 15
+# Shop pointers
+BUY_VARENUCHA = '1'
+BUY_WORMWOOD = '2'
+BUY_BARTKA = '3'
+BUY_NOTHING = '4'
+MERCHANT_INTRO = "Good night, fellow! Greetings, traveler! Welcome to my humble shop!"
+SHOP_CHOICE = f"Do you seek for any treasures or supplies in these enchanted woods? ({VISIT_SHOP_YES}/{VISIT_SHOP_NO}) : "
+VISIT_SHOP_NO = "Ah, I understand, traveler. Perhaps another time! The forest holds many mysteries - stay safe on your journey!"
+DISPLAY = "Excellent choice, traveler! I have a fine selection of things for you. Take a look: \
+\n - I have plenty of bottles of varenucha. Who knows what company you might encounter on your journey?\
+\n - I have bundles of wormwood. Tie one to your belt, and it will shield you from any impure forces lurking in the shadows!\
+\n - I have copper bartkas. Acquire one, and no highwayman will dare cross your path!"
+# Buying goods
+GOODS = f"\nWhat would you choose?\
+\n1 - Varenucha (8 coins)\
+\n2 - Wormwood (15 coins)\
+\n3 - Bartka (10 coins)\
+\n4 - Nothing\
+\nEnter a number ({BUY_VARENUCHA}/{BUY_WORMWOOD}/{BUY_BARTKA}/{BUY_NOTHING}) : "
+MERCHANT_PURCHASE_THANKS = "Ah, a wise choice, traveler! May it serve you well on your adventures. If you need anything else, don’t hesitate to return!"
+MERCHANT_NO_PURCHASE = "Very well, traveler! Sometimes it's best to save your coins for a more pressing need. If you change your mind, my wares will always be here. Safe travels!"
+MERCHANT_NO_COINS = "Ah, it seems your purse is light, traveler. No worries! Perhaps you have something to trade or can come back when your fortunes improve!"
+MERCHANT_NOT_ENOUGH_COINS = "Alas, it seems you don't have enough coins for this purchase. But I still want to offer you some help!"
+# Trading items
+MERCHANT_TRADE = "Do you want to trade something?"
+MERCHANT_TRADE_OPTION = f"You have some items. Do you want to trade them for something else? ({MARCHANT_TRADE_YES}/{MARCHANT_TRADE_NO}) : "
+TRADES = "I will trade any of your items for whatever you want!"
+MERCHANT_TRADE_THANKS = "Thank you for the trade! Hope {} serves you well!"
+MERCHANT_TRADE_NOT_OCCURED = "No worries! If you change your mind, I will be here."
 
 
 # BANDIT
