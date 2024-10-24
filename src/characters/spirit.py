@@ -13,11 +13,8 @@ class Spirit(Character):
       pass 
    
    def guess_character(self):
-        pass
-    
-   def common_guess_input(self):
         return input("Is it a human or a spirit? (h/s): ").strip().lower()
-   
+        
    def load_speech(self, file_path):
         try:
             with open(file_path, 'r') as file:
@@ -35,20 +32,16 @@ class Mavka(Spirit):
 
     def do_action(self):
         self.introduce()
-        self.guess_character()
-        pass
-
-    def introduce(self):
-        print("I am Mavka")
-
-    def guess_character(self):
-        guess = self.common_guess_input()
-        
-        if guess == 's': 
+        if self.guess_character() == 's': 
             print(self.speech) #чот чат гпт накатав мені таку промову, хаха
             print(self.riddle)  # Print the riddle if guessed correctly
         else:
             self.rem_life()
+        pass
+
+    def introduce(self):
+        print("I am Mavka")
+       
     
     def rem_life(self):
         if self.player.lives >= 1:
@@ -59,30 +52,36 @@ class Mavka(Spirit):
 
 # Дає загадки про вогонь.
 class Perelisnyk(Spirit):
-    def introduce(self):
+    def __init__(self, player: Player):
+        super().__init__(player)
+
+    def guess_character(self):
         pass
 
     def do_action(self):
-        pass
+        print("I am Perelisnyk")
 
 # Дає 2 загадки.
 class ForestGuardian(Spirit):
-    def introduce(self):
+    def __init__(self, player: Player):
+        super().__init__(player)
+
+    def guess_character(self):
         pass
 
     def do_action(self):
-        pass
+        print("I am ForestGuardian")
 
 # Дає гроші (спонсор)
 class Demon(Spirit):
-    def introduce(self):
+    def __init__(self, player: Player):
+        super().__init__(player)
+
+    def guess_character(self):
         pass
 
     def do_action(self):
-        pass
+        print("I am Demon")
 
-if __name__ == "__main__":
-    player = Player("a")
-    mavka = Mavka(player)
-    mavka.do_action()
+
 

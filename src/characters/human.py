@@ -5,6 +5,9 @@ class Human(Character):
    @abstractmethod
    def do_action(self):
       pass 
+   
+   def guess_character(self):
+        return input("Is it a human or a spirit? (h/s): ").strip().lower()
 
 # Просто ставить питання.
 class Man(Human):
@@ -15,7 +18,7 @@ class Man(Human):
         pass
 
     def do_action(self):
-        pass
+        print("I am Man")
 
 # Дає підказку за товар, інакше - бреше.
 class Peasant(Human):
@@ -26,7 +29,7 @@ class Peasant(Human):
         pass
 
     def do_action(self):
-        pass
+        print("I am Peasant")
 
 # Продає товар молоко, від духів, від бандита який потім можна виміняти.
 class Merchant(Human):
@@ -37,7 +40,7 @@ class Merchant(Human):
         pass
 
     def do_action(self):
-        pass 
+        print("I am Merchant")
 
 # Дає шанс відкупитись, інакше - :(
 class Bandit(Human):
@@ -48,4 +51,4 @@ class Bandit(Human):
         pass
 
     def do_action(self):
-        pass
+        print("I am Bandit")

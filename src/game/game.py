@@ -37,8 +37,10 @@ class Game:
             character.do_action()
             if isinstance(character, tuple(self.people_classes)):
                 met_people += 1
+                character.guess_character()
             elif isinstance(character, tuple(self.spirit_classes)):
                 met_spirits += 1
+                character.guess_character()
             else:
                 met_silent += 1
 
