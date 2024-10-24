@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from ..characters.character import Character
 from src.game.player import Player  # Імпорт класу Player
 from constants import MAVKA_RIDDLE_PATH, MAVKA_SPEECH_PATH
+from utils import load_speech
 
 class Spirit(Character):
    @abstractmethod
@@ -14,21 +15,13 @@ class Spirit(Character):
    
    def guess_character(self):
         return input("Is it a human or a spirit? (h/s): ").strip().lower()
-        
-   def load_speech(self, file_path):
-        try:
-            with open(file_path, 'r') as file:
-                return file.read().strip()
-        except FileNotFoundError:
-            print(f"Error: The file {file_path} was not found.")
-            return ""
 
  # Якщо вгадаєш, пропускаєш наступний хід.
 class Mavka(Spirit):
     def __init__(self, player: Player):
         super().__init__(player)
-        self.riddle = self.load_speech(MAVKA_RIDDLE_PATH)
-        self.speech = self.load_speech(MAVKA_SPEECH_PATH)
+        self.riddle =load_speech(self, MAVKA_RIDDLE_PATH)
+        self.speech = load_speech(self, MAVKA_SPEECH_PATH)
 
     def do_action(self):
         self.introduce()

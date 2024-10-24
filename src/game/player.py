@@ -4,7 +4,9 @@ class Player:
         self._score = 0
         self._coins = 0
         self._lives = 3
-        self._items = [None, None, None] #trade_item, spirit_defense, human_defence 
+        self._items = [None, None, None] #trade_item, spirit_defense, human_defence
+        self.remaining_people = None
+        self.remaining_spirits = None
 
     def bribe(self):
         pass
@@ -89,3 +91,6 @@ class Player:
         else:
             raise IndexError("Index out of range")  # Обробка помилки
 
+    def set_characters_counters(self, remaining_people, remaining_spirits):
+        self.remaining_people = remaining_people
+        self.remaining_spirits = remaining_spirits

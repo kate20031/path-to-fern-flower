@@ -44,6 +44,8 @@ class Game:
             else:
                 met_silent += 1
 
+            player.set_characters_counters(total_people-met_people, total_spirits-met_spirits)
+
 if __name__ == "__main__":
     player = Player("a")
     game = Game(player)
