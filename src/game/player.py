@@ -7,6 +7,7 @@ class Player:
         self._items = [None, None, None] #trade_item, spirit_defense, human_defence
         self.remaining_people = None
         self.remaining_spirits = None
+        self.is_alive = True
 
     def bribe(self):
         pass

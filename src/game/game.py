@@ -35,6 +35,11 @@ class Game:
 
         for character in self.characters:
             character.do_action()
+
+            if not self.player.is_alive:
+                print("Game Over. You are dead.")
+                break  # Stop the game if the player is dead
+
             if isinstance(character, tuple(self.people_classes)):
                 met_people += 1
                 character.guess_character()

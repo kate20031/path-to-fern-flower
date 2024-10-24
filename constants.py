@@ -28,7 +28,6 @@ PEASANT_REMAINING_SPIRITS = "There are {} spirits you have yet to meet."
 PEASANT_REMAINING_PEOPLE = "There are {} people you have yet to meet."
 PEASANT_NO_ITEMS_FOR_TRADE = "You don't have enough items to trade."
 PEASANT_ACTION = "I am Peasant"
-
 # Minimum items needed for hint trade
 HINT_THRESHOLD = 1
 
@@ -43,3 +42,7 @@ MERCHANT_ACTION = "I am Merchant"
 
 # BANDIT
 BANDIT_ACTION = "I am Bandit"
+BANDIT_PAY_PROMPT = "Pay me with 2 items or face the consequences! Do you pay? (yes/no): "
+BANDIT_KILL_MESSAGE = "You refused to pay! The Bandit attacks and kills you."
+BANDIT_PAY_THANKS = "Wise choice. You may go, for now..."
+PAY_AMOUNT = 2
