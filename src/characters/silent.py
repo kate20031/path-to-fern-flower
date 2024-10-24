@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import random
 from src.game.player import Player  # Імпорт класу Player
 from constants import TRAVELER_SPEECH_PATH, UNDEAD_SPEECH_PATH
+from utils import load_speech
 
 class Silent(ABC):
     @abstractmethod
@@ -11,13 +12,13 @@ class Silent(ABC):
     def __init__(self, player: Player):
         self.player = player  # Зберігаємо екземпляр Player
 
-    def load_speech(self, file_path):
-        try:
-            with open(file_path, 'r') as file:
-                return file.read().strip()
-        except FileNotFoundError:
-            print(f"Error: The file {file_path} was not found.")
-            return ""
+    # def load_speech(self, file_path):
+    #     try:
+    #         with open(file_path, 'r') as file:
+    #             return file.read().strip()
+    #     except FileNotFoundError:
+    #         print(f"Error: The file {file_path} was not found.")
+    #         return ""
 
 # Додає + 1 життя.
 class Nurse(Silent):
@@ -56,7 +57,7 @@ class Robber(Silent):
 class Traveler(Silent):
     def __init__(self, player: Player):
         super().__init__(player)
-        self.speech = self.load_speech(TRAVELER_SPEECH_PATH)
+        self.speech = load_speech(self, TRAVELER_SPEECH_PATH)
 
     def do_action(self):
         self.give_hint()
@@ -88,7 +89,7 @@ class Undead(Silent):
     def __init__(self, player: Player):
         super().__init__(player)
         self.name = "Undead"
-        self.speech = self.load_speech(UNDEAD_SPEECH_PATH)
+        self.speech = load_speech(self, UNDEAD_SPEECH_PATH)
 
     @staticmethod
     def ask_question():
