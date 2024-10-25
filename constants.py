@@ -55,7 +55,7 @@ PEASANT_TRADE_PROMPT = "Do you have anything to trade?"
 PEASANT_MULTI_ITEM_PROMPT = f"You have several items. Do you want to trade one for a hint? ({TRADE_YES}/{TRADE_NO}): "
 PEASANT_NO_TRADE = "Without a trade, I cannot help you. Perhaps you should head west."
 PEASANT_NO_ITEMS = "You have nothing to trade! Maybe next time."
-PEASANT_TRADE_THANKS = "Thank you for the {}!'"
+PEASANT_TRADE_THANKS = "Thank you for {}!"
 PEASANT_REMAINING_SPIRITS = "There are {} spirits you have yet to meet."
 PEASANT_REMAINING_PEOPLE = "There are {} people you have yet to meet."
 PEASANT_NO_ITEMS_FOR_TRADE = "You don't have enough items to trade."
@@ -107,8 +107,14 @@ MERCHANT_TRADE_NOT_OCCURED = "No worries! If you change your mind, I will be her
 
 
 # BANDIT
-BANDIT_ACTION = "I am Bandit"
-BANDIT_PAY_PROMPT = "Pay me with 2 items or face the consequences! Do you pay? (yes/no): "
+PAY_YES = 'yes'
+PAY_NO = 'no'
+PAY_ITEMS = 'items'
+PAY_COINS = 'coins'
+BANDIT_INTRO = "Hey there, traveler! How about a little 'donation' to support my... endeavors?"
+BANDIT_PAY_PROMPT = f"Pay me with 2 items or 10 coins or face the consequences! Do you pay? ({PAY_YES}/{PAY_NO}): "
+BANDIT_PAY_WITH_PROMPT=f"What do youn want to pay me with? ({PAY_ITEMS}/{PAY_COINS}): "
 BANDIT_KILL_MESSAGE = "You refused to pay! The Bandit attacks and kills you."
 BANDIT_PAY_THANKS = "Wise choice. You may go, for now..."
-PAY_AMOUNT = 2
+ITEMS_PAY_AMOUNT = 2
+COINS_PAY_AMOUNT = 10

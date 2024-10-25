@@ -1,5 +1,5 @@
 from abc import abstractmethod
-#from sqlalchemy.sql.functions import random
+from random import randint
 from src.game.player import Player  # Імпорт класу Player
 from ..characters.character import Character
 from constants import *
@@ -29,6 +29,8 @@ class Man(Human):
         print(MAN_ACTION)
 
 # Gives a hint in exchange for an item, otherwise lies.
+import random
+
 class Peasant(Human):
     def __init__(self, player):
         super().__init__(player)
@@ -52,12 +54,28 @@ class Peasant(Human):
             print(PEASANT_NO_ITEMS)
 
     def trade_for_hint(self):
-        if self.player.items:
-            traded_item = self.player.items.pop(0)  # Remove one item from player inventory.
+        # Check if the player has any items to trade
+        if not self.player.items or all(item is None for item in self.player.items):
+            print(PEASANT_NO_ITEMS_FOR_TRADE)
+            return
+
+        print("Select an item to trade for a hint:")
+        for idx, item in enumerate(self.player.items):
+            if item is None:
+                print(f"Slot {idx + 1}: Empty")
+            else:
+                print(f"Slot {idx + 1}: {item}")
+
+        trade_index = int(input("Enter the number of the item you want to trade: ")) - 1
+
+        # Check if the trade index is valid
+        if 0 <= trade_index < len(self.player.items) and self.player.items[trade_index] is not None:
+            traded_item = self.player.items[trade_index]
+            self.player.items[trade_index] = None  # Remove the chosen item from player inventory.
             print(PEASANT_TRADE_THANKS.format(traded_item))
 
-            # Randomly decide whether to give player hint about people or a spirits.
-            human_or_spirit = random(0, 1)
+            # Randomly decide whether to give the player a hint about people or spirits.
+            human_or_spirit = random.randint(0, 1)
 
             if human_or_spirit == 1:
                 remaining_spirits = self.player.remaining_spirits
@@ -66,7 +84,8 @@ class Peasant(Human):
                 remaining_people = self.player.remaining_people
                 print(PEASANT_REMAINING_PEOPLE.format(remaining_people))
         else:
-            print(PEASANT_NO_ITEMS_FOR_TRADE)
+            print("Invalid trade option.")
+
 
 # Sells items like wormwood from spirits or bartka (an axe) from a bandit, which can be traded later.
 class Merchant(Human):
@@ -142,8 +161,7 @@ class Merchant(Human):
 
             if 0 <= trade_index < len(self.player.items) and self.player.items[trade_index] is not None:
                 traded_item = self.player.items[trade_index]
-                self.player.items[trade_index] = None  # Remove traded item
-
+                self.player.items[trade_index] = None
                 print("Select the new item you want to receive:")
                 for idx, (item_name, _) in enumerate(item_mapping.values()):
                     print(f"{idx + 1}: {item_name}")
@@ -171,32 +189,64 @@ class Merchant(Human):
             print(MERCHANT_TRADE_NOT_OCCURED)
 
 
-# Gives the player a chance to pay off, otherwise... :(
 class Bandit(Human):
     def __init__(self, player):
         super().__init__(player)
 
     def introduce(self):
-        print(BANDIT_ACTION)
+        print(BANDIT_INTRO)
 
     def do_action(self):
-        print(BANDIT_ACTION)
+        self.introduce()
 
-        # Check if the player has enough items to pay
-        if len(self.player.items) >= PAY_AMOUNT:
-            answer = input(BANDIT_PAY_PROMPT).strip().lower()
-            if answer == 'yes':
-                self.pay_bandit()
+        # Check if the player has at least 2 non-None items to pay
+        actual_item_count = sum(1 for item in self.player.items if item is not None)
+
+        if actual_item_count < ITEMS_PAY_AMOUNT and self.player.coins < COINS_PAY_AMOUNT:
+            print("Not enough items or coins!")
+            self.kill_player()
+            return
+        
+        answer = input(BANDIT_PAY_PROMPT).strip().lower()
+
+        if answer == PAY_YES:
+            pay_answer = input(BANDIT_PAY_WITH_PROMPT).strip().lower()
+            
+            if pay_answer == 'items':
+                self.pay_bandit_with_items(actual_item_count)
+            elif pay_answer == 'coins':
+                self.pay_bandit_with_coins()
             else:
+                print("Invalid option.")
                 self.kill_player()
         else:
-            print(BANDIT_KILL_MESSAGE)
             self.kill_player()
 
-    def pay_bandit(self):
-        # Remove required number of items from player's inventory
-        for _ in range(PAY_AMOUNT):
-            self.player.items.pop(0)
+    def pay_bandit_with_items(self, actual_item_count):
+        if actual_item_count < ITEMS_PAY_AMOUNT:
+            print("Not enough items to pay the Bandit!")
+            self.kill_player()
+            return
+
+        items_removed = 0
+        for i in range(len(self.player.items)):
+            if self.player.items[i] is not None:
+                pay_item = self.player.items[i]
+                self.player.items[i] = None
+                print(f"You gave {pay_item} to the Bandit.")
+                items_removed += 1
+                if items_removed >= ITEMS_PAY_AMOUNT:
+                    break
+        print(BANDIT_PAY_THANKS)
+
+    def pay_bandit_with_coins(self):
+        if self.player.coins < COINS_PAY_AMOUNT:
+            print("Not enough coins to pay the Bandit!")
+            self.kill_player()
+            return
+
+        self.player.coins -= COINS_PAY_AMOUNT
+        print(f"You paid the Bandit {COINS_PAY_AMOUNT} coins.")
         print(BANDIT_PAY_THANKS)
 
     def kill_player(self):
