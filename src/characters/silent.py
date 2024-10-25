@@ -12,6 +12,7 @@ class Silent(ABC):
     def __init__(self, player: Player):
         self.player = player  # Зберігаємо екземпляр Player
 
+
 # Додає + 1 життя.
 class Nurse(Silent):
     def __init__(self, player: Player):
@@ -26,6 +27,7 @@ class Nurse(Silent):
             print("You have been healed!")
         else:
             print("You don`t need more lives")
+
 
 # Персонаж-шкідник, краде мовчки.
 class Robber(Silent):
@@ -45,6 +47,7 @@ class Robber(Silent):
             stolen_item = self.player.del_item(random_index)
             print(f"A robber has stolen {stolen_item} from your equipment")
 
+
 # Дає підказку про майбутніх персонажів (можна зробити лічильник на духів і людей).
 class Traveler(Silent):
     def __init__(self, player: Player):
@@ -58,6 +61,7 @@ class Traveler(Silent):
     def give_hint(self):
         print(self.speech)
 
+
 # Забирає 1 життя.
 class Witch(Silent):
     def __init__(self, player: Player):
@@ -66,6 +70,7 @@ class Witch(Silent):
     def do_action(self):
         rem_life(self)
         pass
+
 
 # Питає, чи хочеш дізн. про іст. смерті,
 # якщо ні - забирає життя / предмет персонажа (дає вибір),

@@ -16,6 +16,28 @@ UNDEAD_SPEECH_PATH = f'{TEXTS_DIR}undead_speech.txt'
 #MAVKA
 MAVKA_SPEECH_PATH = f'{TEXTS_DIR}mavka_speech.txt'
 MAVKA_RIDDLE_PATH = f'{TEXTS_DIR}mavka_riddle.txt'
+MAVKA_INTRO = "Step nigh, noble wayfarer, and allow me to spin a riddle for thee—solve it, lest the forest claim thee as its own."
+MAVKA_KILLS = "Alas, noble wayfarer, it appears thy wit hath deserted thee...\
+      and now thou shalt join the murmurs of the forest."
+
+#PERELISNYK
+PERELISNYK_SPEECH_PATH = f'{TEXTS_DIR}perelisnyk_speech.txt'
+PERELISNYK_RIDDLE_PATH = f'{TEXTS_DIR}perelisnyk_riddle.txt'
+PERELISNYK_INTRO = "Well, well, a bold man steps into my realm! Seeking riddles, are we?\
+     How charming. But remember, if you fail, you will meet a fiery finale!"
+PERELISNYK_KILLS = "Well, well, another valiant soul ventures in here!\
+     Thou seekest riddles, dost thou? How delightful. \
+     But heed my warning: shouldst thou falter, a fiery end awaits thee!"
+
+#FORESTGUARDIAN
+FORESTGUARDIAN_SPEECH_PATH = f'{TEXTS_DIR}forestguardian_speech.txt'
+FORESTGUARDIAN_RIDDLE1_PATH = f'{TEXTS_DIR}forestguardian_riddle1.txt'
+FORESTGUARDIAN_RIDDLE2_PATH = f'{TEXTS_DIR}forestguardian_riddle2.txt'
+FORESTGUARDIAN_INTRO = "Ah, a traveler in my woodlands!\
+     I shall grant thee the opportunity to demonstrate thy cunning with a series of riddles.\
+     Solve them, and thou mayest pass; fail, and thou shalt become an eternal part of my forest."
+FORESTGUARDIAN_KILLS = "Time's up, traveler! It appears thou hast exhausted thy chances.\
+     Now, thou shalt join my forest, forever entwined with its shadows"
 
 #DEMON
 DEMON_SPEECH_PATH = f'{TEXTS_DIR}demon_speech.txt'
@@ -48,9 +70,10 @@ DEMON_KILLS = "\nAlas, thou nothing hast to keep,\
 ####################################################################################################
 #PEASENT
 # Constants for trade options
+PEASANT_SPEECH_PATH = f'{TEXTS_DIR}peasant_speech.txt' 
 TRADE_YES = 'yes'
 TRADE_NO = 'no'
-PEASANT_INTRO = "Good evening. I'm just a poor peasant, trying to survive in this wilderness."
+PEASANT_INTRO = "I'm just a poor peasant, trying to survive in this wilderness."
 PEASANT_TRADE_PROMPT = "Do you have anything to trade?"
 PEASANT_MULTI_ITEM_PROMPT = f"You have several items. Do you want to trade one for a hint? ({TRADE_YES}/{TRADE_NO}): "
 PEASANT_NO_TRADE = "Without a trade, I cannot help you. Perhaps you should head west."
@@ -65,7 +88,8 @@ HINT_THRESHOLD = 1
 
 
 # MAN
-MAN_ACTION = "I am Man"
+MAN_SPEECH_PATH = f'{TEXTS_DIR}man_speech.txt'
+MAN_GUESSED = "I do not know, where the fern flower is! Now begone!"
 
 
 # MERCHANT

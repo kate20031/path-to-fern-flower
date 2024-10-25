@@ -1,8 +1,10 @@
 from abc import abstractmethod
+import random
 from random import randint
 from src.game.player import Player  # Імпорт класу Player
 from ..characters.character import Character
 from constants import *
+from utils import *
 
 # Constants for types
 HUMAN_TYPE = 'h'
@@ -23,34 +25,45 @@ class Man(Human):
         super().__init__(player)
 
     def introduce(self):
-        pass
+        print(load_speech(self, MAN_SPEECH_PATH))
 
     def do_action(self):
-        print(MAN_ACTION)
+        self.introduce()
+        if self.guess_character() == 'h': 
+            print(MAN_GUESSED)
+        else:
+            print("Guessed wrongly!")
+            # реалізувати логіку додавання 2 нових персонажів на шляху (шлях стає довшим)
+        
 
 # Gives a hint in exchange for an item, otherwise lies.
-import random
-
 class Peasant(Human):
     def __init__(self, player):
         super().__init__(player)
-        self.hint_given = False
+        self.hint_given = False #а нащо нам ця змінна?
 
     def introduce(self):
-        print(PEASANT_INTRO)
+        print(load_speech(self, PEASANT_SPEECH_PATH))
 
     def do_action(self):
-        print(PEASANT_ACTION)
-        print(PEASANT_TRADE_PROMPT)
-
-        # Check if player has more than 1 item.
-        if len(self.player.items) > HINT_THRESHOLD:
+        self.introduce()
+        if self.guess_character() == 'h': 
+            print(PEASANT_INTRO)
+            self.guessed_correctly()
+        else:
+            print("Guessed wrongly!")
+            # реалізувати логіку додавання 2 нових персонажів на шляху (шлях стає довшим)
+    
+    def guessed_correctly(self):
+         print(PEASANT_TRADE_PROMPT)
+         # Check if player has more than 1 item.
+         if len(self.player.items) > HINT_THRESHOLD:
             answer = input(PEASANT_MULTI_ITEM_PROMPT).strip().lower()
             if answer == TRADE_YES:
                 self.trade_for_hint()
             else:
                 print(PEASANT_NO_TRADE)
-        else:
+         else:
             print(PEASANT_NO_ITEMS)
 
     def trade_for_hint(self):
@@ -189,6 +202,7 @@ class Merchant(Human):
             print(MERCHANT_TRADE_NOT_OCCURED)
 
 
+# Gives the player a chance to pay off, otherwise... :(
 class Bandit(Human):
     def __init__(self, player):
         super().__init__(player)
@@ -250,6 +264,5 @@ class Bandit(Human):
         print(BANDIT_PAY_THANKS)
 
     def kill_player(self):
-        self.player.is_alive = False
+        rem_life(self)
         print(BANDIT_KILL_MESSAGE)
-

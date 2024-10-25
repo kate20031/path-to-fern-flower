@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from ..characters.character import Character
 from src.game.player import Player  # Імпорт класу Player
 from constants import *
-from utils import load_speech
+from utils import *
 
 class Spirit(Character):
    @abstractmethod
@@ -16,54 +16,71 @@ class Spirit(Character):
    def guess_character(self):
         return input("Is it a human or a spirit? (h/s): ").strip().lower()
 
- # Якщо вгадаєш, пропускаєш наступний хід.
+
+ # Якщо вгадаєш, пропускаєш наступний 2 наступних зустрічних персонажів.
 class Mavka(Spirit):
     def __init__(self, player: Player):
         super().__init__(player)
-        self.riddle =load_speech(self, MAVKA_RIDDLE_PATH)
-        self.speech = load_speech(self, MAVKA_SPEECH_PATH)
 
     def do_action(self):
         self.introduce()
         if self.guess_character() == 's': 
-            print(self.speech) #чот чат гпт накатав мені таку промову, хаха
-            print(self.riddle)  # Print the riddle if guessed correctly
+            print(MAVKA_INTRO) 
+            self.give_riddle() #реалізувати логіку загадки
         else:
-            self.rem_life()
-        pass
+            print(MAVKA_KILLS)
+            rem_life(self)
+
+    def give_riddle(self):
+        print(load_speech(self, MAVKA_RIDDLE_PATH))
 
     def introduce(self):
-        print("I am Mavka")
+        print(load_speech(self, MAVKA_SPEECH_PATH))
        
-    
-    def rem_life(self):
-        if self.player.lives >= 1:
-            self.player.lives -= 1  # Забирає життя, якщо їх кількість більше = 1
-            print("Mavka has wounded you!")
-        else:
-            print("Game over")
 
 # Дає загадки про вогонь.
+# можна ще щось додати особливе, щоб відрізнялося від Мавки?
 class Perelisnyk(Spirit):
     def __init__(self, player: Player):
         super().__init__(player)
 
-    def guess_character(self):
-        pass
-
     def do_action(self):
-        print("I am Perelisnyk")
+        self.introduce()
+        if self.guess_character() == 's': 
+            print(PERELISNYK_INTRO) 
+            self.give_riddle() #реалізувати логіку загадки
+        else:
+            print(PERELISNYK_KILLS)
+            rem_life(self)
+
+    def give_riddle(self):
+        print(load_speech(self, PERELISNYK_RIDDLE_PATH))
+
+    def introduce(self):
+        print(load_speech(self, PERELISNYK_SPEECH_PATH))
+
 
 # Дає 2 загадки.
 class ForestGuardian(Spirit):
     def __init__(self, player: Player):
         super().__init__(player)
 
-    def guess_character(self):
-        pass
-
     def do_action(self):
-        print("I am ForestGuardian")
+        self.introduce()
+        if self.guess_character() == 's': 
+            print(FORESTGUARDIAN_INTRO) 
+            self.give_riddle() #реалізувати логіку загадки
+        else:
+            print(FORESTGUARDIAN_KILLS)
+            rem_life(self)
+
+    def give_riddle(self):
+        print(load_speech(self, FORESTGUARDIAN_RIDDLE1_PATH))
+        print(load_speech(self, FORESTGUARDIAN_RIDDLE2_PATH))
+
+    def introduce(self):
+        print(load_speech(self, FORESTGUARDIAN_SPEECH_PATH))
+
 
 # Демон(чорт). Якщо вгадати загадку - дає багато грошей, якщо ні - забирає багато грошей
 class Demon(Spirit):
@@ -100,13 +117,6 @@ class Demon(Spirit):
 
     def kill_player(self):
         print(DEMON_KILLS)
-        self.rem_life()
-        
-    def rem_life(self):
-        if self.player.lives >= 1:
-            self.player.lives -= 1  # Забирає життя, якщо їх кількість більше = 1
-            print("Demon has wounded you!")
-        else:
-            print("Game over")
+        rem_life()
 
 
