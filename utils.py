@@ -13,7 +13,7 @@ def load_speech(self, file_path):
 
 def rem_life(player):
     if player.lives >= 1:
-        player.lives -= 1  # Забирає життя, якщо більше =
+        player.lives -= 1
         print("You have lost 1 life")
     else:
         print("Game over")
