@@ -1,6 +1,8 @@
 from abc import abstractmethod
 import random
-from random import randint
+
+from natsort.unicode_numbers import character
+
 from src.game.player import Player  # Імпорт класу Player
 from ..characters.character import Character
 from constants import *
@@ -10,259 +12,215 @@ from utils import *
 HUMAN_TYPE = 'h'
 SPIRIT_TYPE = 's'
 
+
+
 class Human(Character):
     @abstractmethod
     def do_action(self):
         pass
 
-    def guess_character(self):
+    def guess_character(self) -> str:
         return input(f"Is it a human or a spirit? ({HUMAN_TYPE}/{SPIRIT_TYPE}): ").strip().lower()
 
+    def display_inventory(self) -> None:
+        for idx, item in enumerate(self.player.items):
+            print(f"Slot {idx + 1}: {item if item else 'Empty'}")
 
-# Simply asks a question.
+    def select_item(self) -> int:
+        """Prompts the player to select an item index for trading or paying."""
+        while True:
+            try:
+                self.display_inventory()
+                choice = int(input("Enter the number of the item: ")) - 1  # Convert to zero-based index
+
+                # Check if choice is valid
+                if 0 <= choice < len(self.player.items):
+                    if self.player.items[choice] is not None and self.player.items[choice] > 0:
+                        return choice
+                    else:
+                        print("You cannot trade this item because you have none.")
+                else:
+                    print("Invalid choice. Try again.")
+            except ValueError:
+                print("Please enter a valid number.")
+            except IndexError:  # Handle any unexpected IndexErrors
+                print("Invalid choice. Try again.")
+
+
 class Man(Human):
-    def __init__(self, player):
+    """Asks a question, if players makes a mistake ->
+    adds 2 new characters a player will meet with later."""
+    def __init__(self, player: Player):
         super().__init__(player)
 
-    def introduce(self):
+    def introduce(self) -> None:
         print(load_speech(self, MAN_SPEECH_PATH))
 
-    def do_action(self):
+    def do_action(self) -> None:
         self.introduce()
-        if self.guess_character() == 'h': 
+        if self.guess_character() == HUMAN_TYPE:
             print(MAN_GUESSED)
         else:
             print("Guessed wrongly!")
-            # реалізувати логіку додавання 2 нових персонажів на шляху (шлях стає довшим)
-        
+            character1 = create_new_character(self)
+            character2 = create_new_character(self)
+            self.player.add_new_character(character1)
+            self.player.add_new_character(character2)
 
-# Gives a hint in exchange for an item, otherwise lies.
 class Peasant(Human):
-    def __init__(self, player):
+    """Gives a hint in exchange for an item, otherwise lies."""
+    def __init__(self, player: Player):
         super().__init__(player)
-        self.hint_given = False #а нащо нам ця змінна?
 
-    def introduce(self):
+    def introduce(self) -> None:
         print(load_speech(self, PEASANT_SPEECH_PATH))
 
-    def do_action(self):
+    def do_action(self) -> None:
         self.introduce()
-        if self.guess_character() == 'h': 
+        if self.guess_character() == HUMAN_TYPE:
             print(PEASANT_INTRO)
-            self.guessed_correctly()
+            self.handle_trade_offer()
         else:
             print("Guessed wrongly!")
-            # реалізувати логіку додавання 2 нових персонажів на шляху (шлях стає довшим)
-    
-    def guessed_correctly(self):
-         print(PEASANT_TRADE_PROMPT)
-         # Check if player has more than 1 item.
-         if len(self.player.items) > HINT_THRESHOLD:
+            # Add logic to add 2 new characters in path
+
+    def handle_trade_offer(self) -> None:
+        print(PEASANT_TRADE_PROMPT)
+        if len(self.player.items) > HINT_THRESHOLD:
             answer = input(PEASANT_MULTI_ITEM_PROMPT).strip().lower()
             if answer == TRADE_YES:
                 self.trade_for_hint()
             else:
                 print(PEASANT_NO_TRADE)
-         else:
+        else:
             print(PEASANT_NO_ITEMS)
 
-    def trade_for_hint(self):
-        # Check if the player has any items to trade
-        if not self.player.items or all(item is None for item in self.player.items):
+    def trade_for_hint(self) -> None:
+        """Handles trading an item for a hint."""
+        if not any(self.player.items):
             print(PEASANT_NO_ITEMS_FOR_TRADE)
             return
 
-        print("Select an item to trade for a hint:")
-        for idx, item in enumerate(self.player.items):
-            if item is None:
-                print(f"Slot {idx + 1}: Empty")
-            else:
-                print(f"Slot {idx + 1}: {item}")
+        trade_index = self.select_item()
+        traded_item = self.player.items[trade_index]
+        self.player.items[trade_index] = None
+        print(PEASANT_TRADE_THANKS.format(traded_item))
 
-        trade_index = int(input("Enter the number of the item you want to trade: ")) - 1
-
-        # Check if the trade index is valid
-        if 0 <= trade_index < len(self.player.items) and self.player.items[trade_index] is not None:
-            traded_item = self.player.items[trade_index]
-            self.player.items[trade_index] = None  # Remove the chosen item from player inventory.
-            print(PEASANT_TRADE_THANKS.format(traded_item))
-
-            # Randomly decide whether to give the player a hint about people or spirits.
-            human_or_spirit = random.randint(0, 1)
-
-            if human_or_spirit == 1:
-                remaining_spirits = self.player.remaining_spirits
-                print(PEASANT_REMAINING_SPIRITS.format(remaining_spirits))
-            else:
-                remaining_people = self.player.remaining_people
-                print(PEASANT_REMAINING_PEOPLE.format(remaining_people))
-        else:
-            print("Invalid trade option.")
+        hint_type = random.choice(["spirits", "people"])
+        hint = self.player.remaining_spirits if hint_type == "spirits" else self.player.remaining_people
+        print(f"Remaining {hint_type}: {hint}")
 
 
-# Sells items like wormwood from spirits or bartka (an axe) from a bandit, which can be traded later.
+
 class Merchant(Human):
-    def __init__(self, player):
+    """Sells items like wormwood from spirits or bartka (an axe) from a bandit, which can be traded later."""
+    def __init__(self, player: Player):
         super().__init__(player)
 
-    def introduce(self):
+    def introduce(self) -> None:
         print(MERCHANT_INTRO)
 
-    def do_action(self):
+    def do_action(self) -> None:
         self.introduce()
-        item_mapping = self.get_item_mapping()
-        
-        visit_shop = input(SHOP_CHOICE).strip().lower()
-        if visit_shop == VISIT_SHOP_YES:
-            while self.player.coins > 7:
+        if input(SHOP_CHOICE).strip().lower() == VISIT_SHOP_YES:
+            item_mapping = self.get_item_mapping()
+            while self.player.coins > MIN_COINS_FOR_SHOP:
                 action = input("\nWould you like to 'buy' or 'trade'? ").strip().lower()
-
-                if action not in ['buy', 'trade']:
-                    print("Invalid option. Please choose 'buy' or 'trade'.")
-                    continue
-                
                 if action == 'buy':
                     self.handle_purchase(item_mapping)
-
                 elif action == 'trade':
                     self.handle_trade(item_mapping)
+                else:
+                    print("Invalid option. Please choose 'buy' or 'trade'.")
         else:
             print(VISIT_SHOP_NO)
 
-    def get_item_mapping(self):
+    def get_item_mapping(self) -> dict:
         return {
             BUY_VARENUCHA: ("VARENUCHA", VARENUCHA),
             BUY_WORMWOOD: ("WORMWOOD", WORMWOOD),
             BUY_BARTKA: ("BARTKA", BARTKA),
         }
 
-    def handle_purchase(self, item_mapping):
+    def handle_purchase(self, item_mapping: dict) -> None:
         print(DISPLAY)
-        answer_buy = input(GOODS).strip().lower()
+        item_choice = input(GOODS).strip().lower()
 
-        if answer_buy in item_mapping:
-            item_name, item_cost = item_mapping[answer_buy]
-            index = int(answer_buy) - 1  # Use the input as the index directly
-
-            if self.player.items[index] is None:
-                if self.player.coins >= item_cost:
-                    self.player.items[index] = item_name
-                    self.player.coins -= item_cost
-                    print(MERCHANT_PURCHASE_THANKS)
-                else:
-                    print(MERCHANT_NOT_ENOUGH_COINS)
-                    self.handle_trade(item_mapping)
+        if item_choice in item_mapping:
+            item_name, item_cost = item_mapping[item_choice]
+            index = int(item_choice) - 1
+            if self.player.coins >= item_cost and self.player.items[index] is None:
+                self.player.items[index] = item_name
+                self.player.coins -= item_cost
+                print(MERCHANT_PURCHASE_THANKS)
             else:
-                print("You already have this item in your inventory!")
+                print(MERCHANT_NOT_ENOUGH_COINS if self.player.coins < item_cost else "You already have this item!")
         else:
             print(MERCHANT_NO_PURCHASE)
 
-    def handle_trade(self, item_mapping):
+    def handle_trade(self, item_mapping: dict) -> None:
         print(MERCHANT_TRADE)
-        trade_ans = input(MERCHANT_TRADE_OPTION).strip().lower()
+        if input(MERCHANT_TRADE_OPTION).strip().lower() == MARCHANT_TRADE_YES:
+            trade_index = self.select_item()
+            traded_item = self.player.items[trade_index]
+            self.player.items[trade_index] = None
 
-        if trade_ans == MARCHANT_TRADE_YES:
-            print(TRADES)
-            print("Select an item from your inventory to trade:")
-            for idx, item in enumerate(self.player.items):
-                if item is None:
-                    print(f"Slot {idx + 1}: Empty")
-                else:
-                    print(f"Slot {idx + 1}: {item}")
+            for idx, (item_name, _) in enumerate(item_mapping.values()):
+                print(f"{idx + 1}: {item_name}")
+            new_item_choice = int(input("Enter the number of the new item: ")) - 1
+            new_item_name = list(item_mapping.keys())[new_item_choice]
 
-            trade_index = int(input("Enter the number of the item you want to trade: ")) - 1
-
-            if 0 <= trade_index < len(self.player.items) and self.player.items[trade_index] is not None:
-                traded_item = self.player.items[trade_index]
-                self.player.items[trade_index] = None
-                print("Select the new item you want to receive:")
-                for idx, (item_name, _) in enumerate(item_mapping.values()):
-                    print(f"{idx + 1}: {item_name}")
-
-                new_item_choice = int(input("Enter the number of the new item: ")) - 1
-
-                # Check if the new_item_choice is valid
-                if new_item_choice < 0 or new_item_choice >= len(item_mapping):
-                    print("Invalid item selection.")
-                    return
-
-                # Get the actual item name for the new choice
-                new_item_name = item_mapping[list(item_mapping.keys())[new_item_choice]][0]
-
-                # Check if the player already has the new item
-                if new_item_name in self.player.items:
-                    print(f"You already have {new_item_name} in your inventory!")
-                else:
-                    # Add new item to inventory
-                    self.player.items[new_item_choice] = new_item_name
-                    print(f"You traded {traded_item} for {new_item_name}!")
+            if new_item_name in self.player.items:
+                print(f"You already have {new_item_name} in your inventory!")
             else:
-                print("Invalid trade option.")
+                self.player.items[new_item_choice] = new_item_name
+                print(f"You traded {traded_item} for {new_item_name}!")
         else:
             print(MERCHANT_TRADE_NOT_OCCURED)
 
 
-# Gives the player a chance to pay off, otherwise... :(
+
 class Bandit(Human):
-    def __init__(self, player):
+    """Gives the player a chance to pay off, otherwise... :("""
+    def __init__(self, player: Player):
         super().__init__(player)
 
-    def introduce(self):
+    def introduce(self) -> None:
         print(BANDIT_INTRO)
 
-    def do_action(self):
+    def do_action(self) -> None:
         self.introduce()
 
-        # Check if the player has at least 2 non-None items to pay
         actual_item_count = sum(1 for item in self.player.items if item is not None)
-
         if actual_item_count < ITEMS_PAY_AMOUNT and self.player.coins < COINS_PAY_AMOUNT:
             print("Not enough items or coins!")
-            self.kill_player()
+            rem_life(self.player)
             return
-        
-        answer = input(BANDIT_PAY_PROMPT).strip().lower()
 
-        if answer == PAY_YES:
-            pay_answer = input(BANDIT_PAY_WITH_PROMPT).strip().lower()
-            
-            if pay_answer == 'items':
-                self.pay_bandit_with_items(actual_item_count)
-            elif pay_answer == 'coins':
-                self.pay_bandit_with_coins()
+        if input(BANDIT_PAY_PROMPT).strip().lower() == PAY_YES:
+            if input(BANDIT_PAY_WITH_PROMPT).strip().lower() == 'items':
+                self.pay_with_items()
             else:
-                print("Invalid option.")
-                self.kill_player()
+                self.pay_with_coins()
         else:
-            self.kill_player()
+            rem_life(self.player)
 
-    def pay_bandit_with_items(self, actual_item_count):
-        if actual_item_count < ITEMS_PAY_AMOUNT:
-            print("Not enough items to pay the Bandit!")
-            self.kill_player()
-            return
-
-        items_removed = 0
-        for i in range(len(self.player.items)):
-            if self.player.items[i] is not None:
-                pay_item = self.player.items[i]
+    def pay_with_items(self) -> None:
+        """Pays the bandit using items if the player has enough."""
+        items_to_pay = ITEMS_PAY_AMOUNT
+        for i, item in enumerate(self.player.items):
+            if item and items_to_pay > 0:
+                print(f"You gave {item} to the Bandit.")
                 self.player.items[i] = None
-                print(f"You gave {pay_item} to the Bandit.")
-                items_removed += 1
-                if items_removed >= ITEMS_PAY_AMOUNT:
-                    break
+                items_to_pay -= 1
         print(BANDIT_PAY_THANKS)
 
-    def pay_bandit_with_coins(self):
+    def pay_with_coins(self) -> None:
+        """Pays the bandit using coins if the player has enough."""
         if self.player.coins < COINS_PAY_AMOUNT:
             print("Not enough coins to pay the Bandit!")
-            self.kill_player()
-            return
-
-        self.player.coins -= COINS_PAY_AMOUNT
-        print(f"You paid the Bandit {COINS_PAY_AMOUNT} coins.")
-        print(BANDIT_PAY_THANKS)
-
-    def kill_player(self):
-        rem_life(self)
-        print(BANDIT_KILL_MESSAGE)
+            rem_life(self.player)
+        else:
+            self.player.coins -= COINS_PAY_AMOUNT
+            print(f"You paid the Bandit {COINS_PAY_AMOUNT} coins.")
+            print(BANDIT_PAY_THANKS)

@@ -50,6 +50,7 @@ class Game:
                 met_silent += 1
 
             player.set_characters_counters(total_people-met_people, total_spirits-met_spirits)
+            player.set_characters_list(self.characters)
 
 if __name__ == "__main__":
     player = Player("a")

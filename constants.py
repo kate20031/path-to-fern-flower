@@ -95,7 +95,9 @@ MAN_GUESSED = "I do not know, where the fern flower is! Now begone!"
 # MERCHANT
 VISIT_SHOP_YES = MARCHANT_TRADE_YES = 'yes'
 VISIT_SHOP_NO = MARCHANT_TRADE_NO = 'no'
+MIN_COINS_FOR_SHOP = 7
 # Number of coins for each item
+
 VARENUCHA = 8
 BARTKA = 10
 WORMWOOD = 15
