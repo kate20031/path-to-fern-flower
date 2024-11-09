@@ -8,6 +8,7 @@ TRAVELER_SPEECH_PATH = f'{TEXTS_DIR}traveller_speech.txt'
 
 #UNDEAD
 UNDEAD_SPEECH_PATH = f'{TEXTS_DIR}undead_speech.txt'
+UNDEAD_MOURN = "Ugh! Even in death, I'm forsaken..."
 ####################################################################################################
 
 
@@ -33,6 +34,11 @@ PERELISNYK_KILLS = "Well, well, another valiant soul ventures in here!\
 FORESTGUARDIAN_SPEECH_PATH = f'{TEXTS_DIR}forestguardian_speech.txt'
 FORESTGUARDIAN_RIDDLE1_PATH = f'{TEXTS_DIR}forestguardian_riddle1.txt'
 FORESTGUARDIAN_RIDDLE2_PATH = f'{TEXTS_DIR}forestguardian_riddle2.txt'
+FORESTGUARDIAN_ADD_RIDDLE = "Thou think’st to take what doth not belong to thee?\
+     Thou hast freed that ghost, knowing not the rules.\
+     A foolish deed, yet one I shall forgive—this time.\
+     Yet heed me well: more riddles shall I give thee than I had first intended, to show thee the weight of thy actions."
+FORESTGUARDIAN_RIDDLE3_PATH = f'{TEXTS_DIR}forestguardian_riddle3.txt'
 FORESTGUARDIAN_INTRO = "Ah, a traveler in my woodlands!\
      I shall grant thee the opportunity to demonstrate thy cunning with a series of riddles.\
      Solve them, and thou mayest pass; fail, and thou shalt become an eternal part of my forest."
@@ -139,7 +145,7 @@ PAY_ITEMS = 'items'
 PAY_COINS = 'coins'
 BANDIT_INTRO = "Hey there, traveler! How about a little 'donation' to support my... endeavors?"
 BANDIT_PAY_PROMPT = f"Pay me with 2 items or 10 coins or face the consequences! Do you pay? ({PAY_YES}/{PAY_NO}): "
-BANDIT_PAY_WITH_PROMPT=f"What do youn want to pay me with? ({PAY_ITEMS}/{PAY_COINS}): "
+BANDIT_PAY_WITH_PROMPT=f"What do you want to pay me with? ({PAY_ITEMS}/{PAY_COINS}): "
 BANDIT_KILL_MESSAGE = "You refused to pay! The Bandit attacks and kills you."
 BANDIT_PAY_THANKS = "Wise choice. You may go, for now..."
 ITEMS_PAY_AMOUNT = 2

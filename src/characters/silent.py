@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import random
 from src.game.player import Player  # Import the Player class
-from constants import TRAVELER_SPEECH_PATH, UNDEAD_SPEECH_PATH
+from constants import TRAVELER_SPEECH_PATH, UNDEAD_SPEECH_PATH, UNDEAD_MOURN
 from utils import load_speech, rem_life
 
 class Silent(ABC):
@@ -83,6 +83,7 @@ class Undead(Silent):
         super().__init__(player)
         self.name = "Undead"
         self.speech = load_speech(self, UNDEAD_SPEECH_PATH)
+        self.rejection_flag = "no"
 
     @staticmethod
     def ask_question():
@@ -92,21 +93,47 @@ class Undead(Silent):
     def tell_story(self):
         print(self.speech)
 
-    def process_answer(self, answer):
+    def meet_consequences(self, answer):
         if answer:
             self.tell_story()
         else:
-            if self.player.items:
-                choice = input("Lose a life or an item? (life/item): ").strip().lower()
-                if choice == 'life':
-                    rem_life(self.player)
-                else:
-                    self.player.del_item(random.randint(0, len(self.player.items) - 1))
-                    print("You lost an item instead of a life.")
+            if self.rejection_flag == "no":
+                print("You listened to the Undead's story, and they reward you with 5 coins.")
+                self.player.coins += 5  # Додаємо монети гравцеві
             else:
-                rem_life(self.player)
+                print("You rejected the Undead's story earlier, and now they revenge you.")
+                if self.player.items:
+                    choice = input("Lose a life or an item? (life/item): ").strip().lower()
+                    if choice == 'life':
+                        rem_life(self.player)
+                    else:
+                        self.player.del_item(random.randint(0, len(self.player.items) - 1))
+                        print("You lost an item instead of a life.")
+                else:
+                    rem_life(self.player)
 
     def do_action(self):
+        """Introduces the Undead and asks the player if they accept the story."""
+        # Імпортуємо Game тут, де він нам потрібен
+        from src.game.game import Game
+
+        # Отримуємо екземпляр гри
+        game = Game(self.player)  # Ініціалізація гри (можна підлаштувати під реальний випадок)
+
         print("I am Undead")
-        answer = self.ask_question()
-        self.process_answer(answer)
+
+        if game.first_encountered_undead:
+            self.meet_consequences()
+            # Якщо вже була зустріч з Undead               
+        else:
+            # Перша зустріч з Undead
+            answer = self.ask_question()
+
+            if answer == "no":
+                print(UNDEAD_MOURN)
+            else:
+                self.tell_story()
+
+            # Зберігаємо першу зустріч
+            game.first_encountered_undead = True
+            game.rejection_flag = answer  # Записуємо відповідь гравця
