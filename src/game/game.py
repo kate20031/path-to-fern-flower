@@ -25,20 +25,21 @@ class Game:
         total_spirits = len(self.spirit_classes)
         total_silent = len(self.silent_classes)
 
-        self.character_classes = self.people_classes + self.spirit_classes + self.silent_classes
-        self.characters = self.create_characters()
-
         # Ініціалізація атрибутів для відслідковування зустрічей з Undead
         self.first_encountered_undead = False  # Перша зустріч з Undead
         self.rejection_flag = None  # Чи відмовився гравець від історії Undead
 
+        self.character_classes = self.people_classes + self.spirit_classes + self.silent_classes
+        self.characters = self.create_characters()
+
+     
     def create_characters(self):
         characters = []
         
         # Створення персонажів із можливістю зустріти 1 чи 2 Undead
         for _ in range(7):  # Припустимо, ми хочемо створити 7 персонажів у грі
             # Створюємо нового персонажа за допомогою утилітної функції, передаючи статус зустрічі з Undead
-            new_character = create_new_character(self.player, self.first_encountered_undead, self.rejection_flag)
+            new_character = create_new_character(self, self.first_encountered_undead, self.rejection_flag)
             
             # Додаємо новоствореного персонажа до списку
             characters.append(new_character)

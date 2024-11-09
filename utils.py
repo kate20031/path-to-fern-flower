@@ -68,6 +68,6 @@ def create_new_character(self, first_encountered_undead, rejection_flag) -> None
 
     # Для інших персонажів просто створюємо їх без додаткових параметрів
     else:
-        new_character = chosen_class(self.player)
+        new_character = chosen_class(self)
 
     return new_character
