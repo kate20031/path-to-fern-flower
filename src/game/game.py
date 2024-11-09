@@ -28,19 +28,19 @@ class Game:
         self.character_classes = self.people_classes + self.spirit_classes + self.silent_classes
         self.characters = self.create_characters()
 
-        # Track if the Undead has been encountered
-        self.first_encountered_undead = False
-        self.rejection_flag = None  # To store player's answer to the Undead's question
+        # Ініціалізація атрибутів для відслідковування зустрічей з Undead
+        self.first_encountered_undead = False  # Перша зустріч з Undead
+        self.rejection_flag = None  # Чи відмовився гравець від історії Undead
 
     def create_characters(self):
         characters = []
         
-        # Create characters using the utility function, allowing for 1 or 2 Undead encounters
-        for _ in range(7):  # Let's assume we want to create 7 characters in the game
-            # Create a new character using the utility function
-            new_character = create_new_character(self)  # Passing the Game instance to the helper function
+        # Створення персонажів із можливістю зустріти 1 чи 2 Undead
+        for _ in range(7):  # Припустимо, ми хочемо створити 7 персонажів у грі
+            # Створюємо нового персонажа за допомогою утилітної функції, передаючи статус зустрічі з Undead
+            new_character = create_new_character(self.player, self.first_encountered_undead, self.rejection_flag)
             
-            # Add the newly created character to the characters list
+            # Додаємо новоствореного персонажа до списку
             characters.append(new_character)
 
         return characters
@@ -49,49 +49,54 @@ class Game:
         global met_people, met_spirits, met_silent
 
         for character in self.characters:
-            character.do_action()
+            # Якщо персонаж не є ForestGuardian або Undead, просто виконуємо його дію
+            if not isinstance(character, (ForestGuardian, Undead)):
+                character.do_action()
 
+            # Якщо гравець помер, виводимо повідомлення і завершуємо гру
             if not self.player.is_alive:
                 print("Game Over. You are dead.")
-                break  # Stop the game if the player is dead
+                break  # Завершуємо гру, якщо гравець мертвий
 
+            # Перевірка, чи є персонаж людиною
             if isinstance(character, tuple(self.people_classes)):
                 met_people += 1
                 character.guess_character()
+            # Перевірка, чи є персонаж духом
             elif isinstance(character, tuple(self.spirit_classes)):
                 met_spirits += 1
                 character.guess_character()
-
-                # Handle behavior for ForestGuardian based on Undead's first encounter
                 if isinstance(character, ForestGuardian):
-                    if self.first_encountered_undead:
-                        if self.rejection_flag == "no":
-                            # If the player accepted the Undead's story, give 3 riddles
-                            character.riddle_num = 3
-                        else:
-                            # If the player rejected the Undead's story, give 2 riddles (default)
-                            character.riddle_num = 2
-                    else:
-                        # If the Undead hasn't been encountered, default behavior applies
-                        character.riddle_num = 2
+                    # Передача відповідних параметрів щодо зустрічі з Undead
+                    undead_met = "yes" if self.first_encountered_undead else "no"
+                    result = character.do_action(self, undead_met, self.rejection_flag)
+                    
+                    # Обробка результату дії ForestGuardian
+                    if result == "yes":
+                        self.first_encountered_undead = True
+                    elif result == "no":
+                        self.rejection_flag = "no"
 
+            # Перевірка, чи є персонаж мовчазною істотою (Undead)
             else:
                 met_silent += 1
-                
                 if isinstance(character, Undead):
-                    # Handle the first and second encounter with Undead
-                    if self.first_encountered_undead:
-                        # This is the second encounter, we process rejection or life deduction
-                        if self.rejection_flag == "no":
-                            rem_life(self.player)  # Deduct a life if we rejected the Undead
-                    else:
-                        # First encounter with Undead
+                    # Якщо це перша зустріч, передаємо відповідні параметри
+                    already_met = "yes" if self.first_encountered_undead else "no"
+                    rejection_flag = self.rejection_flag if self.first_encountered_undead else None
+                    result = character.do_action(self, already_met, rejection_flag)
+                    
+                    # Оновлюємо інформацію після зустрічі з Undead
+                    if result == "yes":
+                        self.rejection_flag = "yes"
                         self.first_encountered_undead = True
-                        self.rejection_flag = character.rejection_flag  # Store the player's response
+                    elif result == "no":
+                        self.rejection_flag = "no"
+                        self.first_encountered_undead = True
 
+        # Оновлюємо лічильники для персонажів
         self.player.set_characters_counters(total_people - met_people, total_spirits - met_spirits)
         self.player.set_characters_list(self.characters)
-
 
 
 if __name__ == "__main__":

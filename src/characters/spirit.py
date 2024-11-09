@@ -74,31 +74,32 @@ class Perelisnyk(Spirit):
 
 class ForestGuardian(Spirit):
     """Gives 2 riddles to the player in general. If the Player chooses to listen to the Undead, gives 3 riddles."""
-    
-    def __init__(self, player: Player):
+
+    def __init__(self, player: Player, undead_met: str, rejection_flag: str):
         super().__init__(player)
         self.riddle_num = 2  # Default riddle number (2)
+        self.undead_met = undead_met  # "yes" or "no" whether Undead has been met
+        self.rejection_flag = rejection_flag  # "yes" or "no" if the player rejected the Undead's story
 
     def do_action(self):
-        """Introduces the Forest Guardian and presents two riddles if guessed correctly; else, removes a life."""
-        # Імпортуємо Game тут, де він нам потрібен
-        from src.game.game import Game
-
-        # Отримуємо екземпляр гри
-        game = Game(self.player)  # Ініціалізація гри (можна підлаштувати під реальний випадок)
-
+        """Introduces the Forest Guardian and presents riddles based on the player's encounter with the Undead."""
         self.introduce()
 
-        # Check if the player has encountered the Undead and if they accepted or rejected the Undead's story
-        if game.first_encountered_undead:
-            if game.rejection_counter == "no":
-                self.riddle_num = 3  # Give 3 riddles if the player accepted the Undead's story
+        # If the player has met the Undead
+        if self.undead_met == "yes":
+            # If the player accepted the Undead's story, give 3 riddles
+            if self.rejection_flag == "no":
+                self.riddle_num = 3
             else:
-                self.riddle_num = 2  # Give 2 riddles if the player rejected the Undead
+                self.riddle_num = 2  # If the player rejected the Undead's story, give only 2 riddles
+        else:
+            # Default behavior for the Forest Guardian
+            self.riddle_num = 2
 
+        # Ask riddles based on the player's previous decisions
         if self.guess_character() == SPIRIT_TYPE:
             print(FORESTGUARDIAN_INTRO)
-            self.give_riddle()  # Implement riddle logic based on the player's choice
+            self.give_riddle()  # Ask riddles
         else:
             print(FORESTGUARDIAN_KILLS)
             rem_life(self.player)
@@ -107,17 +108,16 @@ class ForestGuardian(Spirit):
         """Presents riddles to the player."""
         print(load_speech(self, FORESTGUARDIAN_RIDDLE1_PATH))
         if self.riddle_num == 3:
-            # Give the third riddle if the player accepted the Undead's story
             print(load_speech(self, FORESTGUARDIAN_RIDDLE2_PATH))
             print(FORESTGUARDIAN_ADD_RIDDLE)
             print(load_speech(self, FORESTGUARDIAN_RIDDLE3_PATH))  # Third riddle
         else:
-            # Only give two riddles
             print(load_speech(self, FORESTGUARDIAN_RIDDLE2_PATH))
 
     def introduce(self):
         """Introduces the Forest Guardian through a scripted speech."""
         print(load_speech(self, FORESTGUARDIAN_SPEECH_PATH))
+
 
 
 class Demon(Spirit):

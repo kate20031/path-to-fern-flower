@@ -79,11 +79,13 @@ class Undead(Silent):
     """Asks if you want to learn about the cause of death,
     if no - takes a life or an item (offers choice),
     if yes - tells a story and skips a turn."""
-    def __init__(self, player: Player):
+    
+    def __init__(self, player: Player, already_met: str, rejection_flag: str):
         super().__init__(player)
         self.name = "Undead"
         self.speech = load_speech(self, UNDEAD_SPEECH_PATH)
-        self.rejection_flag = "no"
+        self.already_met = already_met  # "yes" or "no" indicating whether the Undead has been met
+        self.rejection_flag = rejection_flag  # "yes" or "no" indicating whether the player rejected the story
 
     @staticmethod
     def ask_question():
@@ -99,7 +101,7 @@ class Undead(Silent):
         else:
             if self.rejection_flag == "no":
                 print("You listened to the Undead's story, and they reward you with 5 coins.")
-                self.player.coins += 5  # Додаємо монети гравцеві
+                self.player.coins += 5  # Add coins to the player's inventory
             else:
                 print("You rejected the Undead's story earlier, and now they revenge you.")
                 if self.player.items:
@@ -114,26 +116,18 @@ class Undead(Silent):
 
     def do_action(self):
         """Introduces the Undead and asks the player if they accept the story."""
-        # Імпортуємо Game тут, де він нам потрібен
-        from src.game.game import Game
-
-        # Отримуємо екземпляр гри
-        game = Game(self.player)  # Ініціалізація гри (можна підлаштувати під реальний випадок)
-
         print("I am Undead")
 
-        if game.first_encountered_undead:
-            self.meet_consequences()
-            # Якщо вже була зустріч з Undead               
+        if self.already_met == "yes":
+            # If the Undead has been met before, process consequences based on rejection_flag
+            self.meet_consequences(self.rejection_flag)
         else:
-            # Перша зустріч з Undead
+            # First encounter with Undead: ask the player if they want to hear the story
             answer = self.ask_question()
 
             if answer == "no":
                 print(UNDEAD_MOURN)
+                return "yes"  # Player rejected, return "yes"
             else:
                 self.tell_story()
-
-            # Зберігаємо першу зустріч
-            game.first_encountered_undead = True
-            game.rejection_flag = answer  # Записуємо відповідь гравця
+                return "no"  # Player accepted, return "no"
