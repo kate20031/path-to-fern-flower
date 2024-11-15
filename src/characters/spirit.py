@@ -26,7 +26,8 @@ class Mavka(Spirit):
     """If guessed correctly, player skips the next two character encounters."""
 
     def __init__(self, player: Player):
-        super().__init__(player)
+        self.player = player
+        #super().__init__(player)
 
     def do_action(self):
         """Introduces Mavka and presents a riddle if guessed correctly; else, removes a life."""
@@ -51,7 +52,8 @@ class Perelisnyk(Spirit):
     """Gives riddles related to fire. Can be further differentiated from Mavka."""
 
     def __init__(self, player: Player):
-        super().__init__(player)
+        self.player = player
+        #super().__init__(player)
 
     def do_action(self):
         """Introduces Perelisnyk and presents a riddle if guessed correctly; else, removes a life."""
@@ -76,7 +78,8 @@ class ForestGuardian(Spirit):
     """Gives 2 riddles to the player in general. If the Player chooses to listen to the Undead, gives 3 riddles."""
 
     def __init__(self, player: Player, undead_met: str, rejection_flag: str):
-        super().__init__(player)
+        #super().__init__(player)
+        self.player = player
         self.riddle_num = 2  # Default riddle number (2)
         self.undead_met = undead_met  # "yes" or "no" whether Undead has been met
         self.rejection_flag = rejection_flag  # "yes" or "no" if the player rejected the Undead's story
@@ -124,34 +127,35 @@ class Demon(Spirit):
     """Demon character. If player guesses the riddle correctly, they receive a reward. If not, the Demon takes a large amount of coins."""
 
     def __init__(self, player: Player):
-        super().__init__(player)
+        self.player = player
+        #super().__init__(player)
         self.riddle = load_speech(self, DEMON_RIDDLE_PATH)
         self.speech = load_speech(self, DEMON_SPEECH_PATH)
 
     def do_action(self):
         """Performs Demon's action based on player's guess.
-         If correct, presents a riddle; otherwise, takes coins or
-        items, otherwise - kills."""
+        If correct, presents a riddle; otherwise, takes coins or
+        items, or kills."""
         stolen_coins = 0
         if self.guess_character() == SPIRIT_TYPE:
             print(self.speech)
             print(self.riddle)  # Print the riddle if guessed correctly
         else:
-            if self.player.coins:
-                if self.player.coins >= 10:
-                    stolen_coins = 10
+            if self.player.coins > 0:
+                stolen_coins = min(self.player.coins, 10)  # Steal up to 10 coins
                 self.player.coins -= stolen_coins
-
                 print(DEMON_STEALS_COINS)
                 print(f"Demon has stolen {stolen_coins} coins!")
             else:
-                if any(item > 0 for item in self.player.items[:3]):
+                # Check if the player has any items
+                if any(count > 0 for count in self.player.items.values()):
                     print(DEMON_GIVES_A_CHANCE)
                     answer = input(DEMON_BRIBE).strip().lower()
                     if answer == GIVE_TO_DEMON:
-                        for i in range(3):
-                            if self.player.items[i] > 0:
-                                self.player.items[i] = 0
+                        # Remove the first available item
+                        for item, count in self.player.items.items():
+                            if count > 0:
+                                self.player.items[item] -= 1
                                 break
                         print(DEMON_RETREATS)
                     else:

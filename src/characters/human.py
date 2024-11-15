@@ -51,7 +51,8 @@ class Man(Human):
     """Asks a question, if players makes a mistake ->
     adds 2 new characters a player will meet with later."""
     def __init__(self, player: Player):
-        super().__init__(player)
+        #super().__init__(player)
+        self.player = player
 
     def introduce(self) -> None:
         print(load_speech(self, MAN_SPEECH_PATH))
@@ -70,7 +71,8 @@ class Man(Human):
 class Peasant(Human):
     """Gives a hint in exchange for an item, otherwise lies."""
     def __init__(self, player: Player):
-        super().__init__(player)
+        #super().__init__(player)
+        self.player = player
 
     def introduce(self) -> None:
         print(load_speech(self, PEASANT_SPEECH_PATH))
@@ -115,23 +117,36 @@ class Peasant(Human):
 class Merchant(Human):
     """Sells items like wormwood from spirits or bartka (an axe) from a bandit, which can be traded later."""
     def __init__(self, player: Player):
-        super().__init__(player)
+        self.player = player
+        #super().__init__(player)
 
     def introduce(self) -> None:
         print(MERCHANT_INTRO)
 
     def do_action(self) -> None:
+        """
+        Handles the merchant's interaction with the player, allowing them to buy or trade items.
+        """
         self.introduce()
+
         if input(SHOP_CHOICE).strip().lower() == VISIT_SHOP_YES:
             item_mapping = self.get_item_mapping()
             while self.player.coins > MIN_COINS_FOR_SHOP:
-                action = input("\nWould you like to 'buy' or 'trade'? ").strip().lower()
-                if action == 'buy':
+                print("\nWhat would you like to do?")
+                print("1. Buy items")
+                print("2. Trade items")
+                print("3. Leave the shop")
+                action = input("Enter your choice (1/2/3): ").strip()
+
+                if action == '1':  # Buy
                     self.handle_purchase(item_mapping)
-                elif action == 'trade':
+                elif action == '2':  # Trade
                     self.handle_trade(item_mapping)
-                else:
-                    print("Invalid option. Please choose 'buy' or 'trade'.")
+                elif action == '3':  # Leave shop
+                    print("You decide to leave the shop. Come back anytime!")
+                    break
+                else:  # Invalid input
+                    print("Invalid option. Please choose 1, 2, or 3.")
         else:
             print(VISIT_SHOP_NO)
 
@@ -159,31 +174,39 @@ class Merchant(Human):
             print(MERCHANT_NO_PURCHASE)
 
     def handle_trade(self, item_mapping: dict) -> None:
+        """
+        Handles the trade of items between the player and the merchant.
+        :param item_mapping: A dictionary mapping item options to their names and costs.
+        """
         print(MERCHANT_TRADE)
         if input(MERCHANT_TRADE_OPTION).strip().lower() == MARCHANT_TRADE_YES:
-            trade_index = self.select_item()
-            traded_item = self.player.items[trade_index]
-            self.player.items[trade_index] = None
+            trade_item = input("Enter the name of the item you want to trade: ").strip()
 
-            for idx, (item_name, _) in enumerate(item_mapping.values()):
-                print(f"{idx + 1}: {item_name}")
-            new_item_choice = int(input("Enter the number of the new item: ")) - 1
-            new_item_name = list(item_mapping.keys())[new_item_choice]
+            if trade_item in self.player.items and self.player.items[trade_item] > 0:
+                self.player.items[trade_item] -= 1  # Remove one count of the traded item
+                print(f"You traded {trade_item}. Choose your new item:")
 
-            if new_item_name in self.player.items:
-                print(f"You already have {new_item_name} in your inventory!")
+                for idx, (item_key, (item_name, _)) in enumerate(item_mapping.items(), start=1):
+                    print(f"{idx}: {item_name}")
+
+                new_item_choice = input("Enter the number of the new item: ").strip()
+                if new_item_choice in item_mapping:
+                    new_item_name, _ = item_mapping[new_item_choice]
+                    self.player.items[new_item_name] += 1  # Add the new item to the inventory
+                    print(f"You traded {trade_item} for {new_item_name}!")
+                else:
+                    print("Invalid choice. Trade cancelled.")
             else:
-                self.player.items[new_item_choice] = new_item_name
-                print(f"You traded {traded_item} for {new_item_name}!")
+                print(f"You don't have {trade_item} in your inventory.")
         else:
             print(MERCHANT_TRADE_NOT_OCCURED)
-
 
 
 class Bandit(Human):
     """Gives the player a chance to pay off, otherwise... :("""
     def __init__(self, player: Player):
-        super().__init__(player)
+        self.player = player
+        #super().__init__(player)
 
     def introduce(self) -> None:
         print(BANDIT_INTRO)

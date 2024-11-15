@@ -39,7 +39,7 @@ class Game:
         # Створення персонажів із можливістю зустріти 1 чи 2 Undead
         for _ in range(7):  # Припустимо, ми хочемо створити 7 персонажів у грі
             # Створюємо нового персонажа за допомогою утилітної функції, передаючи статус зустрічі з Undead
-            new_character = create_new_character(self, self.first_encountered_undead, self.rejection_flag)
+            new_character = create_new_character(self)
             
             # Додаємо новоствореного персонажа до списку
             characters.append(new_character)
@@ -70,7 +70,7 @@ class Game:
                 if isinstance(character, ForestGuardian):
                     # Передача відповідних параметрів щодо зустрічі з Undead
                     undead_met = "yes" if self.first_encountered_undead else "no"
-                    result = character.do_action(self, undead_met, self.rejection_flag)
+                    result = character.do_action()
                     
                     # Обробка результату дії ForestGuardian
                     if result == "yes":
@@ -85,7 +85,7 @@ class Game:
                     # Якщо це перша зустріч, передаємо відповідні параметри
                     already_met = "yes" if self.first_encountered_undead else "no"
                     rejection_flag = self.rejection_flag if self.first_encountered_undead else None
-                    result = character.do_action(self, already_met, rejection_flag)
+                    result = character.do_action()
                     
                     # Оновлюємо інформацію після зустрічі з Undead
                     if result == "yes":

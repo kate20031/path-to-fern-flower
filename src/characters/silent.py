@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 import random
+
+from src.game import player
 from src.game.player import Player  # Import the Player class
 from constants import TRAVELER_SPEECH_PATH, UNDEAD_SPEECH_PATH, UNDEAD_MOURN
 from utils import load_speech, rem_life
@@ -9,15 +11,16 @@ class Silent(ABC):
     def do_action(self):
         pass
 
-    def __init__(self, player: Player):
-        self.player = player  # Store an instance of Player
+    # def __init__(self, player: Player):
+    #     self.player = player  # Store an instance of Player
 
 
 
 class Nurse(Silent):
     """Adds +1 life."""
-    def __init__(self, player: Player):
-        super().__init__(player)
+    def __init__(self, pl: Player):
+        # super().__init__(player)
+        self.player = pl
 
     def do_action(self):
         self.add_life()
@@ -33,28 +36,36 @@ class Nurse(Silent):
 
 class Robber(Silent):
     """Harmful character, steals silently."""
-    def __init__(self, player: Player):
-        super().__init__(player)
+    def __init__(self, pl: Player):
+        self.player = pl
+        #super().__init__(player)
 
     def do_action(self):
         self.steal_item()
         pass
 
     def steal_item(self):
-        if self.player.items[2]:  # if there’s protection from humans, does not steal
-            print("A robber has been defeated!")
-            self.player.del_item(2)
-        else:
-            random_index = random.randint(0, 1)  # steals an item for trade or protection from spirits
-            stolen_item = self.player.del_item(random_index)
-            print(f"A robber has stolen {stolen_item} from your equipment")
+        # Check if the player has protection from humans (assume it's represented by the Bartka item)
+        if self.player.items.get("Bartka", 0) > 0:
+            print("The Robber decided not to steal because you have protection.")
+            return
 
+        # Check if there are any items to steal
+        available_items = [item for item, count in self.player.items.items() if count > 0]
+        if available_items:
+            # Select a random item to steal
+            stolen_item = random.choice(available_items)
+            self.player.items[stolen_item] -= 1  # Decrease the item count
+            print(f"The Robber stole one {stolen_item}.")
+        else:
+            print("The Robber found nothing to steal.")
 
 
 class Traveler(Silent):
     """Gives a hint about future characters (can make a counter for spirits and humans)."""
-    def __init__(self, player: Player):
-        super().__init__(player)
+    def __init__(self, pl: Player):
+        # super().__init__(pl)
+        self.player = pl
         self.speech = load_speech(self, TRAVELER_SPEECH_PATH)
 
     def do_action(self):
@@ -67,8 +78,9 @@ class Traveler(Silent):
 
 # Takes away 1 life.
 class Witch(Silent):
-    def __init__(self, player: Player):
-        super().__init__(player)
+    def __init__(self, pl: Player):
+        self.player = pl
+        #super().__init__(player)
 
     def do_action(self):
         rem_life(self.player)
@@ -80,8 +92,9 @@ class Undead(Silent):
     if no - takes a life or an item (offers choice),
     if yes - tells a story and skips a turn."""
     
-    def __init__(self, player: Player, already_met: str, rejection_flag: str):
-        super().__init__(player)
+    def __init__(self, pl: Player, already_met: str, rejection_flag: str):
+        # super().__init__(player)
+        self.player = pl
         self.name = "Undead"
         self.speech = load_speech(self, UNDEAD_SPEECH_PATH)
         self.already_met = already_met  # "yes" or "no" indicating whether the Undead has been met
@@ -104,14 +117,21 @@ class Undead(Silent):
                 self.player.coins += 5  # Add coins to the player's inventory
             else:
                 print("You rejected the Undead's story earlier, and now they revenge you.")
-                if self.player.items:
-                    choice = input("Lose a life or an item? (life/item): ").strip().lower()
-                    if choice == 'life':
-                        rem_life(self.player)
-                    else:
-                        self.player.del_item(random.randint(0, len(self.player.items) - 1))
-                        print("You lost an item instead of a life.")
+                if self.player.items:  # Check if the player has items
+                    while True:
+                        choice = input("Lose a life or an item? (life/item): ").strip().lower()
+                        if choice == 'life':
+                            rem_life(self.player)
+                            break
+                        elif choice == 'item':
+                            item_index = random.randint(0, len(self.player.items) - 1)
+                            self.player.del_item(item_index)
+                            print("You lost an item instead of a life.")
+                            break
+                        else:
+                            print("Invalid choice. Please enter 'life' or 'item'.")
                 else:
+                    print("You have no items to lose. Losing a life instead.")
                     rem_life(self.player)
 
     def do_action(self):

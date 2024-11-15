@@ -95,13 +95,13 @@ class Player:
         print("No space to add more items.")  # Display message if no space available
 
     def del_item(self, index):
-        """Removes an item at a specified index if valid; otherwise, raises an error."""
-        if 0 <= index < len(self._items):  # Validate index
-            removed_item = self._items[index]
-            self._items[index] = None  # Mark slot as empty
-            return removed_item  # Return removed item
+        if 0 <= index < len(self._items):
+            removed_item = self._items.pop(index)
+            print(f"Removed item: {removed_item}")
+            return removed_item
         else:
-            raise IndexError("Index out of range")  # Handle out-of-range error
+            print(f"Invalid index {index}. No item removed.")
+            return None
 
     def set_characters_counters(self, remaining_people, remaining_spirits):
         """Sets the counters for remaining people and spirits encountered by the player."""
