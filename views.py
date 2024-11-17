@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # path_to_fern_flower/views.py
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -54,7 +54,7 @@ def game(request):
         return render(request, 'game/game.html')
     else:
         return redirect('login')
-=======
+
 # path_to_fern_flower/views.py
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -110,4 +110,4 @@ def game(request):
         return render(request, 'game/game.html')
     else:
         return redirect('login')
->>>>>>> 1dd51f0b6274b73d1e89e4fd1eaf8c5ff42a6ebf
+
