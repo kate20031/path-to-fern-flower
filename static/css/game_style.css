@@ -1,0 +1,110 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #7b1fa2, #6a1b9a);
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    background: linear-gradient(135deg, #ffdd00, #ff77a8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #e0e0e0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+/* Button Styling */
+button {
+    padding: 15px 25px;
+    background: linear-gradient(135deg, #ff512f, #dd2476);
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.3s, background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(135deg, #ffdd00, #fbc02d);
+    box-shadow: 0 0 20px 5px rgba(255, 215, 0, 0.8);
+}
+
+button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+
+.mouse-glow {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 215, 0, 0.8);
+    width: 50px;
+    height: 50px;
+    pointer-events: none;
+    animation: pulse 1s infinite;
+    opacity: 0.6;
+}
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(0);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.4;
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0.8;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    button {
+        font-size: 18px;
+        padding: 12px 20px;
+    }
+}
+
+.game-image {
+    margin-bottom: 20px;
+}

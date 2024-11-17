@@ -1,0 +1,136 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #d7b0ff, #8cabe8);
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+h2 {
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+form p {
+    margin-bottom: 1rem;
+}
+
+input, button {
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid transparent;
+    border-radius: 25px;
+    font-size: 16px;
+    width: 100%;
+}
+
+input {
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+}
+
+input::placeholder {
+    color: #666;
+}
+
+input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #6a11cb;
+    animation: pulse 0.3s ease-in-out;
+}
+
+button {
+    background: linear-gradient(135deg, #ff512f, #dd2476);
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 18px;
+    transition: transform 0.2s, background 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, #dd2476, #ff512f);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+a {
+    color: #ffed4a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Error Messages */
+ul {
+    list-style: none;
+    color: #ff6666;
+    font-size: 14px;
+    margin-bottom: 1rem;
+}
+
+ul li {
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+}
+
+/* Animations */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(106, 17, 203, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 10px 4px rgba(106, 17, 203, 0.2);
+    }
+}

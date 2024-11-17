@@ -1,12 +1,9 @@
 from abc import abstractmethod
-import random
-
-from natsort.unicode_numbers import character
 
 from src.game.player import Player  # Імпорт класу Player
 from ..characters.character import Character
 from constants import *
-from utils import *
+from path_to_fern_flower.utils import *
 
 # Constants for types
 HUMAN_TYPE = 'h'

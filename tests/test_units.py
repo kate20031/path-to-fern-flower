@@ -4,7 +4,7 @@ from unittest.mock import patch, mock_open
 from src.characters.human import Merchant, Peasant
 from src.characters.spirit import Mavka
 from src.game.player import Player
-from utils import load_speech, rem_life, create_new_character
+from path_to_fern_flower.utils import load_speech, rem_life, create_new_character
 
 class TestUtils(unittest.TestCase):
 

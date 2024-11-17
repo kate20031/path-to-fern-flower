@@ -1,8 +1,8 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from ..characters.character import Character
 from src.game.player import Player
 from constants import *
-from utils import *
+from path_to_fern_flower.utils import *
 SPIRIT_TYPE = 's'
 
 class Spirit(Character):
