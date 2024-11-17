@@ -1,4 +1,4 @@
-ASSETS_DIR = 'assets/'
+ASSETS_DIR = 'media/'
 TEXTS_DIR = f'{ASSETS_DIR}texts/'
 
 # SILENT
