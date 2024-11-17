@@ -101,8 +101,8 @@ class Undead(Silent):
 
     @staticmethod
     def ask_question():
-        question = "Do you want to know how I died? (yes/no)"
-        return input(question).strip().lower() == 'yes'
+        question = "Do you want to know how I died? (yes/no): "
+        return input(question).strip().lower() 
 
     def tell_story(self):
         print(self.speech)
