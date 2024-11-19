@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 ASSETS_DIR = 'media/'
 TEXTS_DIR = f'{ASSETS_DIR}texts/'
 
@@ -150,7 +150,6 @@ BANDIT_PAY_WITH_PROMPT=f"What do you want to pay me with? ({PAY_ITEMS}/{PAY_COIN
 BANDIT_KILL_MESSAGE = "You refused to pay! The Bandit attacks and kills you."
 BANDIT_PAY_THANKS = "Wise choice. You may go, for now..."
 ITEMS_PAY_AMOUNT = 2
-=======
 ASSETS_DIR = 'media/'
 TEXTS_DIR = f'{ASSETS_DIR}texts/'
 
@@ -302,5 +301,4 @@ BANDIT_PAY_WITH_PROMPT=f"What do you want to pay me with? ({PAY_ITEMS}/{PAY_COIN
 BANDIT_KILL_MESSAGE = "You refused to pay! The Bandit attacks and kills you."
 BANDIT_PAY_THANKS = "Wise choice. You may go, for now..."
 ITEMS_PAY_AMOUNT = 2
->>>>>>> 1dd51f0b6274b73d1e89e4fd1eaf8c5ff42a6ebf
 COINS_PAY_AMOUNT = 10

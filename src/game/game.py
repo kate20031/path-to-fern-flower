@@ -2,11 +2,11 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 
-from src.characters.human import Merchant, Peasant, Man, Bandit
-from src.characters.spirit import Perelisnyk, ForestGuardian, Mavka, Demon
-from src.characters.silent import Nurse, Robber, Traveler, Witch, Undead
-from src.game.player import Player
-from path_to_fern_flower.utils import *
+from characters.human import Merchant, Peasant, Man, Bandit
+from characters.spirit import Perelisnyk, ForestGuardian, Mavka, Demon
+from characters.silent import Nurse, Robber, Traveler, Witch, Undead
+from game.player import Player
+from utils import *
 
 total_people = 0
 met_people = 0
@@ -54,7 +54,7 @@ class Game:
         self.window.title("Path to Fern Flower")
 
         # Load and display image
-        image_path = "path-to-fern-flower\\media\\images\\img.png"
+        image_path = "..\\path-to-fern-flower\\media\\images\\img.png"
         img = Image.open(image_path)
         img = img.resize((400, 400))  # Resize image to fit the window
         img_tk = ImageTk.PhotoImage(img)
