@@ -1,12 +1,16 @@
+import os
+import sys
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 
-from characters.human import Merchant, Peasant, Man, Bandit
-from characters.spirit import Perelisnyk, ForestGuardian, Mavka, Demon
-from characters.silent import Nurse, Robber, Traveler, Witch, Undead
-from game.player import Player
-from utils import *
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+from src.game.player import Player
+from src.characters.human import Man, Peasant, Merchant, Bandit
+from src.characters.silent import Witch, Undead, Nurse, Robber, Traveler
+from src.characters.spirit import Mavka, ForestGuardian, Demon, Perelisnyk
+
+from src.utils import create_new_character
 
 total_people = 0
 met_people = 0
@@ -54,7 +58,7 @@ class Game:
         self.window.title("Path to Fern Flower")
 
         # Load and display image
-        image_path = "..\\path-to-fern-flower\\media\\images\\img.png"
+        image_path = "..\\\\media\\images\\img.png"
         img = Image.open(image_path)
         img = img.resize((400, 400))  # Resize image to fit the window
         img_tk = ImageTk.PhotoImage(img)
@@ -141,9 +145,3 @@ class Game:
         # Оновлюємо лічильники для персонажів
         self.player.set_characters_counters(total_people - met_people, total_spirits - met_spirits)
         self.player.set_characters_list(self.characters)
-
-
-if __name__ == "__main__":
-    player = Player("a")
-    game = Game(player)
-    game.run()

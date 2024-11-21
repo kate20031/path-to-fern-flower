@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from game.player import Player
+from src.game.player import Player
 
 
 class Character(ABC):

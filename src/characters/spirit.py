@@ -1,8 +1,11 @@
+import os
+import sys
 from abc import abstractmethod
-from characters.character import Character
-from game.player import Player
-from constants import *
-from utils import *
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+from src.characters.character import Character
+from src.game.player import Player
+from src.constants import *
+from src.utils import *
 SPIRIT_TYPE = 's'
 
 class Spirit(Character):

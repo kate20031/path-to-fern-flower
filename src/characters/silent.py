@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 import random
 
-from game.player import Player  # Import the Player class
-from constants import TRAVELER_SPEECH_PATH, UNDEAD_SPEECH_PATH, UNDEAD_MOURN
-from utils import load_speech, rem_life
+from src.game.player import Player  # Import the Player class
+from src.constants import TRAVELER_SPEECH_PATH, UNDEAD_SPEECH_PATH, UNDEAD_MOURN
+from src.utils import load_speech, rem_life
 
 class Silent(ABC):
     @abstractmethod

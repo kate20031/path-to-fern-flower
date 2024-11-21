@@ -1,10 +1,10 @@
 class Player:
     """Represents the player character, including attributes like score, coins, lives, and items."""
 
-    def __init__(self, nickname):
+    def __init__(self):
         """Initializes the player with a nickname, starting coins, lives, and items."""
         self.characters = []
-        self._nickname = nickname
+        self._nickname = ""
         self._score = 0
         self._coins = 10  # Starting capital
         self._lives = 3

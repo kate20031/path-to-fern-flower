@@ -1,9 +1,9 @@
 from abc import abstractmethod
 
-from game.player import Player  # Імпорт класу Player
-from characters.character import Character
-from constants import *
-from utils import *
+from src.game.player import Player  # Імпорт класу Player
+from src.characters.character import Character
+from src.constants import *
+from src.utils import *
 
 # Constants for types
 HUMAN_TYPE = 'h'
