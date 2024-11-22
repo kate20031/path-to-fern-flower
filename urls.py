@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.contrib import admin
 from django.urls import path
 import views
@@ -10,7 +9,7 @@ urlpatterns = [
     # path('about/', views.about, name='about'),
     # path('contact/', views.contact, name='contact'),
 ]
-=======
+
 from django.contrib import admin
 from django.urls import path
 import views
@@ -22,4 +21,3 @@ urlpatterns = [
     # path('about/', views.about, name='about'),
     # path('contact/', views.contact, name='contact'),
 ]
->>>>>>> 1dd51f0b6274b73d1e89e4fd1eaf8c5ff42a6ebf

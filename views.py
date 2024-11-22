@@ -104,10 +104,12 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'game/login.html', {'form': form})
 
-# Game page
 def game(request):
     if request.user.is_authenticated:
-        return render(request, 'game/game.html')
+        context = {
+            'player_name': request.user.username  # Pass the username as player_name
+        }
+        return render(request, 'game/game.html', context)
     else:
         return redirect('login')
 
