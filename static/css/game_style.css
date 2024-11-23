@@ -1,4 +1,4 @@
-
+/* Скидаємо відступи та задаємо базову стилізацію для всіх елементів */
 * {
     margin: 0;
     padding: 0;
@@ -6,20 +6,22 @@
     font-family: 'Arial', sans-serif;
 }
 
+/* Основні стилі для тіла сторінки */
 body {
-    background: linear-gradient(135deg, #7b1fa2, #6a1b9a);
+    background: linear-gradient(135deg, #7b1fa2, #6a1b9a); /* Градієнтний фон */
     color: #fff;
     font-size: 16px;
     line-height: 1.6;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100vh; /* Висота екрану */
     text-align: center;
     flex-direction: column;
     overflow: hidden;
 }
 
+/* Заголовок */
 h1 {
     font-size: 36px;
     margin-bottom: 20px;
@@ -30,6 +32,7 @@ h1 {
     -webkit-text-fill-color: transparent;
 }
 
+/* Текст опису */
 p {
     font-size: 18px;
     margin-bottom: 30px;
@@ -37,7 +40,7 @@ p {
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
-/* Button Styling */
+/* Стиль кнопок */
 button {
     padding: 15px 25px;
     background: linear-gradient(135deg, #ff512f, #dd2476);
@@ -61,7 +64,7 @@ button:active {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-
+/* Ефект світіння для миші */
 .mouse-glow {
     position: absolute;
     border-radius: 50%;
@@ -72,7 +75,6 @@ button:active {
     animation: pulse 1s infinite;
     opacity: 0.6;
 }
-
 
 @keyframes pulse {
     0% {
@@ -89,7 +91,7 @@ button:active {
     }
 }
 
-/* Responsive Design */
+/* Респонсив дизайн для мобільних пристроїв */
 @media (max-width: 600px) {
     h1 {
         font-size: 28px;
@@ -105,6 +107,51 @@ button:active {
     }
 }
 
-.game-image {
-    margin-bottom: 20px;
+/* Стиль для контейнера, який містить зображення персонажа */
+#character-container {
+    position: absolute; /* Позиціюємо контейнер на абсолютній основі */
+    top: 0;
+    left: 0;
+    width: 100%; /* Займає всю ширину екрану */
+    height: 100%; /* Займає всю висоту екрану */
+    display: flex;
+    justify-content: center; /* Центрує зображення по горизонталі */
+    align-items: center; /* Центрує зображення по вертикалі */
+    z-index: 5; /* Перекриває фон, але є під зображенням персонажа */
 }
+
+/* Стиль для фонового зображення */
+.game-image {
+    width: 100%; /* Фон займає всю ширину */
+    height: 100%; /* Фон займає всю висоту */
+    object-fit: cover; /* Масштабування фону, щоб він заповнював весь екран */
+    display: block; /* Забезпечує правильне відображення */
+}
+
+/* Стиль для зображення персонажа */
+#character-img {
+    position: absolute; /* Абсолютне позиціонування для зображення поверх фону */
+    top: 50%; /* Центруємо по вертикалі */
+    left: 50%; /* Центруємо по горизонталі */
+    transform: translate(-50%, -50%); /* Точне вирівнювання */
+    width: 300px; /* Можна налаштувати розмір персонажа */
+    height: auto;
+    opacity: 0; /* Початково зображення невидиме */
+    animation: fadeIn 2s forwards; /* Анімація для появи */
+    z-index: 10; /* Забезпечує, щоб персонаж був на передньому плані */
+}
+
+/* Анімація появи персонажа */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0); /* Початковий зменшений розмір */
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1); /* Кінцевий розмір */
+    }
+}
+
+
+

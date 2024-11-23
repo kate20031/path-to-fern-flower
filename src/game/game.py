@@ -39,7 +39,7 @@ class Game:
         self.character_classes = self.people_classes + self.spirit_classes + self.silent_classes
         self.characters = self.create_characters()
         self.create_game_window()
-     
+
     def create_characters(self):
         characters = []
         
@@ -57,10 +57,11 @@ class Game:
         self.window = tk.Tk()
         self.window.title("Path to Fern Flower")
 
-        # Load and display image
-        image_path = "..\\\\media\\images\\img.png"
+        # Load and display background image
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+        image_path = os.path.join(base_dir, "static/images/background.png")
         img = Image.open(image_path)
-        img = img.resize((400, 400))  # Resize image to fit the window
+        img = img.resize((425, 283))  # Resize image to fit the window
         img_tk = ImageTk.PhotoImage(img)
 
         label_image = tk.Label(self.window, image=img_tk)
@@ -68,7 +69,7 @@ class Game:
         label_image.pack(pady=20)
 
         # Player information display
-        player_info = f"Nickname: {self.player.nickname}\nCoins: {self.player.coins}\nLives: {self.player.lives}\nItems: {self.player.items}"
+        player_info = f"Nickname: {self.player.nickname}  Coins: {self.player.coins}  Lives: {self.player.lives}\nItems: {self.player.items}"
         label_info = tk.Label(self.window, text=player_info, font=("Arial", 14))
         label_info.pack(pady=10)
 
@@ -78,6 +79,14 @@ class Game:
 
         button_human.pack(side=tk.LEFT, padx=40)
         button_spirit.pack(side=tk.RIGHT, padx=40)
+
+        # Display character image
+        self.character_label = tk.Label(self.window)
+        self.character_label.pack(pady=20)
+
+        # Dialogue box for interaction with characters
+        self.dialogue_box = tk.Label(self.window, text="", font=("Arial", 12), width=50, height=4, anchor="w", justify="left")
+        self.dialogue_box.pack(pady=10)
 
         self.window.mainloop()
 
@@ -92,56 +101,73 @@ class Game:
     def run_game_loop(self, choice):
         global met_people, met_spirits, met_silent
 
-    def run(self):
-        global met_people, met_spirits, met_silent
-
         for character in self.characters:
-            # Якщо персонаж не є ForestGuardian або Undead, просто виконуємо його дію
-            if not isinstance(character, (ForestGuardian, Undead)):
-                character.do_action()
+            # Display character image dynamically based on type
+            self.display_character_image(character)
 
-            # Якщо гравець помер, виводимо повідомлення і завершуємо гру
+            # Dynamically create interaction buttons
+            self.show_choice_buttons(character)
+
             if not self.player.is_alive:
                 print("Game Over. You are dead.")
                 self.window.quit()
-                break  # Завершуємо гру, якщо гравець мертвий
+                break
 
-            # Перевірка, чи є персонаж людиною
-            if isinstance(character, tuple(self.people_classes)):
+            # Check if the character is a human
+            if any(isinstance(character, cls) for cls in self.people_classes):
                 met_people += 1
+                self.dialogue_box.config(text=f"You met a {character.__class__.__name__}!")
                 character.guess_character()
-            # Перевірка, чи є персонаж духом
-            elif isinstance(character, tuple(self.spirit_classes)):
+            
+            # Check if the character is a spirit
+            elif any(isinstance(character, cls) for cls in self.spirit_classes):
                 met_spirits += 1
+                self.dialogue_box.config(text=f"You met a {character.__class__.__name__}!")
                 character.guess_character()
-                if isinstance(character, ForestGuardian):
-                    # Передача відповідних параметрів щодо зустрічі з Undead
-                    undead_met = "yes" if self.first_encountered_undead else "no"
-                    result = character.do_action()
-                    
-                    # Обробка результату дії ForestGuardian
-                    if result == "yes":
-                        self.first_encountered_undead = True
-                    elif result == "no":
-                        self.rejection_flag = "no"
-
-            # Перевірка, чи є персонаж мовчазною істотою (Undead)
+            
+            # If it's a silent entity (Undead, Witch, etc.)
             else:
                 met_silent += 1
-                if isinstance(character, Undead):
-                    # Якщо це перша зустріч, передаємо відповідні параметри
-                    already_met = "yes" if self.first_encountered_undead else "no"
-                    rejection_flag = self.rejection_flag if self.first_encountered_undead else None
-                    result = character.do_action()
-                    
-                    # Оновлюємо інформацію після зустрічі з Undead
-                    if result == "yes":
-                        self.rejection_flag = "yes"
-                        self.first_encountered_undead = True
-                    elif result == "no":
-                        self.rejection_flag = "no"
-                        self.first_encountered_undead = True
+                self.dialogue_box.config(text=f"You met a {character.__class__.__name__}!")
 
-        # Оновлюємо лічильники для персонажів
+        # Update player counters for met characters
         self.player.set_characters_counters(total_people - met_people, total_spirits - met_spirits)
         self.player.set_characters_list(self.characters)
+
+    def display_character_image(self, character):
+        # Отримуємо ім'я класу персонажа (дочірнього класу)
+        character_class_name = character.__class__.__name__
+        print(f"Displaying image for class: {character_class_name}")  # Діагностичний вивід
+        
+        # Формуємо шлях до зображення, використовуючи ім'я дочірнього класу
+        image_path = self.get_character_image_path(character_class_name)
+
+        # Відкриваємо зображення
+        img = Image.open(image_path)
+        img = img.resize((60, 60))  # Змінюємо розмір зображення для вікна
+        img_tk = ImageTk.PhotoImage(img)
+
+        # Оновлюємо зображення на екрані
+        self.character_label.config(image=img_tk)
+        self.character_label.image = img_tk  # Зберігаємо посилання на зображення
+
+    def get_character_image_path(self, character_class_name):
+        print(f"Getting image for class: {character_class_name}")  # Діагностичний вивід
+        # Базовий шлях до зображень
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+        
+        # Формуємо шлях до зображення, залежно від точного імені класу персонажа
+        image_path = os.path.join(base_dir, f"static/images/{character_class_name}.png")
+        
+        return image_path
+
+
+    def show_choice_buttons(self, character):
+        # Hide the buttons for now and show the options
+        if isinstance(character):
+            button_human = tk.Button(self.window, text="Talk to this Human", font=("Arial", 12), command=self.on_human_choice)
+            # button_human = tk.Button(self.window, text="Talk to this Human", font=("Arial", 12), command=self.on_human_choice)
+            # button_spirit = tk.Button(self.window, text="Talk to this Spirit", font=("Arial", 12), command=self.on_spirit_choice)
+
+            # button_human.pack(side=tk.LEFT, padx=40)
+            # button_spirit.pack(side=tk.RIGHT, padx=40)

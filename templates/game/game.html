@@ -1,10 +1,10 @@
-{% load static %}
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play Game</title>
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/game_style.css' %}">
     <script>
         let playerCoins = 10;
@@ -13,58 +13,85 @@
         function startGame() {
             document.getElementById("start-screen").style.display = "none";
             document.getElementById("game-screen").style.display = "block";
+            encounterCharacter("Human");  // Початковий вибір персонажа
         }
 
         function chooseHuman() {
             alert("You chose Human!");
-
-            playerCoins -= 1;  // For example, choosing Human costs 1 coin
-            playerLives -= 1;  // And costs 1 life
-
-
-            document.getElementById("player-coins").innerText = playerCoins;
-            document.getElementById("player-lives").innerText = playerLives;
-
-
+            playerCoins -= 1;
+            playerLives -= 1;
+            updatePlayerStats();
             document.getElementById("player-choice").innerHTML = "You chose Human.";
+            document.getElementById("dialogue").style.display = "none";
         }
 
         function chooseSpirit() {
             alert("You chose Spirit!");
-            playerCoins += 2;  // For example, choosing Spirit gives 2 coins
-            playerLives -= 1;  // And costs 1 life
+            playerCoins += 2;
+            playerLives -= 1;
+            updatePlayerStats();
+            document.getElementById("player-choice").innerHTML = "You chose Spirit.";
+            document.getElementById("dialogue").style.display = "none";
+        }
 
+        function updatePlayerStats() {
             document.getElementById("player-coins").innerText = playerCoins;
             document.getElementById("player-lives").innerText = playerLives;
+        }
 
-            document.getElementById("player-choice").innerHTML = "You chose Spirit.";
+        // Функція для показу зображення конкретного персонажа
+        function showCharacter(characterClass) {
+            // Видалити попереднє зображення, якщо є
+            const previousImg = document.getElementById("character-img");
+            if (previousImg) {
+                previousImg.remove();
+            }
+
+            // Створити новий елемент <img>
+            var img = document.createElement("img");
+
+            // Використовуємо точне ім'я класу для визначення шляху до зображення
+            img.src = "{% static 'images/' %}" + characterClass + ".png";
+            img.alt = "Character Image";
+            img.id = "character-img";  // Встановлюємо ID для можливості видаляти старі зображення
+
+            // Додаємо зображення в контейнер на сторінці
+            document.getElementById("character-container").appendChild(img);
+        }
+
+        // Функція для зустрічі з персонажем
+        function encounterCharacter(characterClass) {
+            showCharacter(characterClass); // Викликаємо showCharacter для конкретного персонажа
+            const dialogueBox = document.getElementById("dialogue");
+            dialogueBox.style.display = "block";
+            document.getElementById("character-dialogue").innerText = "Do you trust this being? Choose wisely!";
         }
     </script>
 </head>
 <body>
     <div id="start-screen">
         <h1>Start Playing the Visual Novel!</h1>
-        <p>In the darkness of the forest, where shadows come alive and the wind whispers unknown words, a secret awaits. Before you rises an ancient forest, where only the bravest dare to search. At the end of this path lies something that longs to be found—a mysterious flower that grants wishes. But beware, not everything you encounter in this forest will aid your cause. Sometimes, what seems helpful may be a trap. Decide wisely whom to trust. Ready for the challenge? The journey begins now...<br>Prepare yourself, the path to the Fern Flower starts right now...</p>
+        <p>In the darkness of the forest, where shadows come alive and the wind whispers unknown words...</p>
         <button onclick="startGame()">Start Game</button>
     </div>
 
     <div id="game-screen" style="display:none;">
         <h1>Path to Fern Flower</h1>
-        <p>Nickname: <span id="player-name">{{ player_name }}</span></p>
+        <p>Nickname: <span id="player-name">Oleksandr</span></p>
         <p>Coins: <span id="player-coins">10</span></p>
         <p>Lives: <span id="player-lives">3</span></p>
-        <p>Items: <span id="player-items">Varenucha, Wormwood, Bartka</span></p>
 
-    <img src="{% static 'images/img.png' %}" alt="Game Image" width="300" height="460" class="game-image">
-
-
+        <div class="game-container">
+            <img src="{% static 'images/background.png' %}" alt="Game Image" class="game-image">
+            <div id="character-container"></div> <!-- Зображення персонажа з'явиться тут -->
+        </div>
 
         <div class="button-container">
             <button onclick="chooseHuman()">Human</button>
             <button onclick="chooseSpirit()">Spirit</button>
         </div>
 
-        <div id="player-choice" style="margin-top: 30px; "></div>  <!-- Dynamic text after choice -->
+        <div id="player-choice" style="margin-top: 30px;"></div>  
     </div>
 </body>
 </html>
