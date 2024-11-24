@@ -13,7 +13,7 @@
         function startGame() {
             document.getElementById("start-screen").style.display = "none";
             document.getElementById("game-screen").style.display = "block";
-            encounterCharacter("ForestGuardian");  // Початковий вибір персонажа */
+            encounterCharacter("Merchant");  // Початковий вибір персонажа
         }
 
         function chooseHuman() {
@@ -84,11 +84,16 @@
         <div class="game-container">
             <img src="{% static 'images/background.png' %}" alt="Game Image" class="game-image">
             <div id="character-container"></div> <!-- Зображення персонажа з'явиться тут -->
-        </div>
 
-        <div class="button-container">
-            <button onclick="chooseHuman()">Human</button>
-            <button onclick="chooseSpirit()">Spirit</button>
+            <!-- Контейнер для діалогу -->
+            <div id="dialogue" class="text-box" style="display: none;">
+                <div id="character-dialogue">Do you trust this being? Choose wisely!</div>
+            </div>
+
+            <div class="button-container">
+                <button onclick="chooseHuman()">Human</button>
+                <button onclick="chooseSpirit()">Spirit</button>
+            </div>
         </div>
 
         <div id="player-choice" style="margin-top: 30px;"></div>  

@@ -40,17 +40,28 @@ p {
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
-/* Стиль кнопок */
+.button-container {
+    position: absolute; /* Позиціонуємо контейнер кнопок поверх зображення */
+    top: 60%; /* Задаємо відступ від верхньої частини екрана */
+    left: 50%; /* Центруємо по горизонталі */
+    transform: translateX(-50%); /* Точне горизонтальне вирівнювання */
+    z-index: 10; /* Кнопки будуть поверх фону та зображення персонажа */
+    display: flex; /* Використовуємо flex для вирівнювання кнопок */
+    gap: 20px; /* Відстань між кнопками */
+}
+
 button {
-    padding: 15px 25px;
+    padding: 20px 30px;
+    margin: 0 60px;  /* Збільшуємо відстань між кнопками */
     background: linear-gradient(135deg, #ff512f, #dd2476);
     color: #fff;
-    font-size: 20px;
+    font-size: 25px;
     border: none;
     border-radius: 50px;
     cursor: pointer;
     transition: transform 0.3s, background 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 11; /* Задаємо більш високий z-index для кнопок */
 }
 
 button:hover {
@@ -107,6 +118,11 @@ button:active {
     }
 }
 
+.game-container{
+    width: 100%;
+    height: 100%;
+}
+
 /* Стиль для контейнера, який містить зображення персонажа */
 #character-container {
     position: absolute; /* Позиціюємо контейнер на абсолютній основі */
@@ -138,7 +154,7 @@ button:active {
     height: auto;
     opacity: 0; /* Початково зображення невидиме */
     animation: fadeIn 2s forwards; /* Анімація для появи */
-    z-index: 10; /* Забезпечує, щоб персонаж був на передньому плані */
+    z-index: 6; /* Забезпечує, щоб персонаж був на передньому плані */
 }
 
 /* Анімація появи персонажа */
@@ -152,6 +168,53 @@ button:active {
         transform: translate(-50%, -50%) scale(1); /* Кінцевий розмір */
     }
 }
+
+/* Стиль для контейнера тексту персонажа */
+.text-box {
+    position: absolute;
+    bottom: 8%; /* Зміщуємо вниз на 10% */
+    left: 50%;
+    transform: translateX(-50%); /* Центруємо по горизонталі */
+    width: 80%; /* Вікно займає 80% ширини екрану */
+    max-width: 1200px; /* Максимальна ширина вікна */
+    height: auto; /* Автоматична висота, щоб вміст вмістився */
+    background-color: rgba(0, 0, 0, 0.6); /* Прозорий чорний фон */
+    border-radius: 15px; /* Округлені кути */
+    padding: 20px; /* Внутрішні відступи */
+    color: #fff; /* Колір тексту */
+    font-size: 20px; /* Розмір тексту */
+    line-height: 1.5; /* Міжрядковий інтервал */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Тінь для об'єму */
+    z-index: 15; /* Показує текстове вікно поверх інших елементів */
+    opacity: 0; /* Початково текстове вікно невидиме */
+    animation: fadeInText 1s forwards; /* Анімація для появи тексту */
+}
+
+/* Анімація для появи текстового вікна */
+@keyframes fadeInText {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px); /* Початкове положення знизу */
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0); /* Кінцеве положення */
+    }
+}
+
+/* Стиль для тексту в діалозі */
+#character-dialogue {
+    font-size: 20px; /* Розмір тексту */
+    color: #e0e0e0; /* Світло-сірий текст */
+    text-align: left; /* Вирівнюємо текст по лівому краю */
+    line-height: 1.5;
+    word-wrap: break-word; /* Перенос слів при необхідності */
+    display: block; /* Додаємо блоковий елемент */
+    margin: 0 auto; /* Центруємо сам блок по горизонталі */
+    width: fit-content; /* Розмір тексту під вміст */
+}
+
+
 
 
 
